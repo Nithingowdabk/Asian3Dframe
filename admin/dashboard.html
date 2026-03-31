@@ -304,7 +304,7 @@
       <li class="nav-item"><a href="albums.html"><i class="fas fa-folder-open"></i> Manage Albums</a></li>
       <li class="nav-item"><a href="categories.html"><i class="fas fa-tags"></i> Manage Categories</a></li>
       <div class="nav-section-title">Site</div>
-      <li class="nav-item"><a href="admin-manage.html"><i class="fas fa-user-shield"></i> Manage Admins</a></li>
+      <li class="nav-item"><a href="#" id="showAdminManage"><i class="fas fa-user-shield"></i> Manage Admins</a></li>
       <li class="nav-item"><a href="../index.html" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a></li>
     </nav>
     <div class="sidebar-footer">Asian3DFrames Admin &copy; 2026</div>
@@ -328,17 +328,62 @@
       <!-- Stats -->
       <div class="stats-grid" id="statsGrid">
 
-        <!-- Admin Management Section Placeholder -->
-        <section id="adminManageSection" style="display:none;">
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">Admin Management</span>
-            </div>
-            <div class="card-body">
-              <p>Here you can add, edit, or delete admin users. (UI coming soon)</p>
+
+        <!-- Admin Management Section (Embedded) -->
+        <section id="adminManageSection" style="display:none; margin-bottom:32px;">
+          <div class="container" style="max-width:900px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.10);padding:32px;">
+            <h1 style="font-size:2rem;margin-bottom:24px;">Manage Admin Users</h1>
+            <button class="btn btn-add" id="addAdminBtn"><i class="fas fa-user-plus"></i> Add Admin</button>
+            <table class="admin-table" id="adminTable" style="width:100%;border-collapse:collapse;margin-bottom:32px;">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Created At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Admin users will be loaded here -->
+              </tbody>
+            </table>
+          </div>
+          <!-- Modal for Add/Edit Admin -->
+          <div class="modal" id="adminModal">
+            <div class="modal-content">
+              <h2 id="modalTitle">Add Admin</h2>
+              <div class="alert" id="modalAlert" style="display:none;"></div>
+              <form id="adminForm">
+                <div class="form-row">
+                  <label for="adminUsername">Username</label>
+                  <input type="text" id="adminUsername" name="username" required />
+                </div>
+                <div class="form-row">
+                  <label for="adminPassword">Password</label>
+                  <input type="password" id="adminPassword" name="password" required />
+                </div>
+                <div class="modal-actions">
+                  <button type="button" class="btn" id="cancelBtn">Cancel</button>
+                  <button type="submit" class="btn btn-add" id="saveBtn">Save</button>
+                </div>
+              </form>
             </div>
           </div>
         </section>
+          <script src="../assets/js/admin-manage.js"></script>
+          <script>
+            // Show/hide admin management section
+            document.addEventListener('DOMContentLoaded', function() {
+              const adminSection = document.getElementById('adminManageSection');
+              const showAdminBtn = document.getElementById('showAdminManage');
+              showAdminBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Hide all other content except admin section
+                document.querySelectorAll('.stats-grid, .chart-row, .recent-row, .tabs-header, .tab-content').forEach(el => el.style.display = 'none');
+                adminSection.style.display = 'block';
+              });
+            });
+          </script>
         <div class="stat-card">
           <div class="stat-icon gold"><i class="fas fa-shopping-bag"></i></div>
           <div class="stat-body">
