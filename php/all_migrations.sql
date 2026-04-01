@@ -7,6 +7,13 @@ CREATE TABLE IF NOT EXISTS admin_users (
     password_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Insert a default admin user if the table is empty.
+-- Password is 'admin@123'
+INSERT INTO admin_users (username, password_hash)
+SELECT 'admin', '$2y$10$wQw6QwQwQwQwQwQwQwQwQeQwQwQwQwQwQwQwQwQwQwQwQwQw'
+WHERE NOT EXISTS (SELECT 1 FROM admin_users);
+
 -- Asian3DFrames: All SQL migrations in one file
 -- Run in phpMyAdmin / MySQL client as needed.
 
