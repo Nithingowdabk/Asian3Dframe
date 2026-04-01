@@ -29,17 +29,37 @@ function admin_is_authenticated(): bool
 
 function admin_login(string $username, string $password): bool
 {
-    $creds = admin_credentials();
-    if (!hash_equals($creds['username'], $username)) {
+    global $conn; // Use the global database connection from db.php
+
+    $stmt = $conn->prepare('SELECT id, password_hash FROM admin_users WHERE username = ? LIMIT 1');
+    if (!$stmt) {
+        // Optional: log error $conn->error
         return false;
     }
-    if (!password_verify($password, $creds['password_hash'])) {
-        return false;
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows === 0) {
+        $stmt->close();
+        return false; // User not found
     }
+
+    $stmt->bind_result($admin_id, $hash);
+    $stmt->fetch();
+    $stmt->close();
+
+    if (!password_verify($password, $hash)) {
+        return false; // Password incorrect
+    }
+
+    // Regenerate session ID for security
     session_regenerate_id(true);
     $_SESSION['admin_authenticated'] = true;
     $_SESSION['admin_username'] = $username;
+    $_SESSION['admin_id'] = $admin_id;
     $_SESSION['admin_login_at'] = time();
+
     return true;
 }
 
