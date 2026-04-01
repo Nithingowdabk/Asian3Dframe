@@ -49,8 +49,34 @@ function admin_login(string $username, string $password): bool
     $stmt->fetch();
     $stmt->close();
 
-    if (!password_verify($password, $hash)) {
+    $isValid = password_verify($password, $hash);
+
+    // Backward compatibility: accept legacy plain-text stored values once,
+    // then migrate them to a secure hash.
+    if (!$isValid && hash_equals((string)$hash, $password)) {
+        $isValid = true;
+        $newHash = password_hash($password, PASSWORD_DEFAULT);
+        $updateStmt = $conn->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
+        if ($updateStmt) {
+            $updateStmt->bind_param('si', $newHash, $admin_id);
+            $updateStmt->execute();
+            $updateStmt->close();
+        }
+    }
+
+    if (!$isValid) {
         return false; // Password incorrect
+    }
+
+    // Keep hashes up to date with current PHP defaults.
+    if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
+        $rehash = password_hash($password, PASSWORD_DEFAULT);
+        $rehashStmt = $conn->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
+        if ($rehashStmt) {
+            $rehashStmt->bind_param('si', $rehash, $admin_id);
+            $rehashStmt->execute();
+            $rehashStmt->close();
+        }
     }
 
     // Regenerate session ID for security
