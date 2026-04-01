@@ -30,6 +30,7 @@ function admin_is_authenticated(): bool
 function admin_login(string $username, string $password): bool
 {
     global $conn; // Use the global database connection from db.php
+    $creds = admin_credentials();
 
     $stmt = $conn->prepare('SELECT id, password_hash FROM admin_users WHERE username = ? LIMIT 1');
     if (!$stmt) {
@@ -54,6 +55,25 @@ function admin_login(string $username, string $password): bool
     // Backward compatibility: accept legacy plain-text stored values once,
     // then migrate them to a secure hash.
     if (!$isValid && hash_equals((string)$hash, $password)) {
+        $isValid = true;
+        $newHash = password_hash($password, PASSWORD_DEFAULT);
+        $updateStmt = $conn->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
+        if ($updateStmt) {
+            $updateStmt->bind_param('si', $newHash, $admin_id);
+            $updateStmt->execute();
+            $updateStmt->close();
+        }
+    }
+
+    // Migration helper for the historic placeholder hash used in older builds.
+    // If the row has that placeholder and the user logs in with default admin creds,
+    // accept once and immediately replace with a real hash.
+    if (
+        !$isValid
+        && hash_equals((string)$hash, (string)$creds['password_hash'])
+        && hash_equals($username, (string)$creds['username'])
+        && hash_equals($password, 'admin@123')
+    ) {
         $isValid = true;
         $newHash = password_hash($password, PASSWORD_DEFAULT);
         $updateStmt = $conn->prepare('UPDATE admin_users SET password_hash = ? WHERE id = ?');
