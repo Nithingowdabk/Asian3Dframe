@@ -2177,30 +2177,40 @@
 	// ---------------------------------------------------------------------------
 	// 12) Init
 	// ---------------------------------------------------------------------------
+	function safeInit(name, fn) {
+		try {
+			fn();
+		} catch (error) {
+			console.warn(`Init failed: ${name}`, error);
+		}
+	}
+
 	function init() {
-		setupMobileNavToggle();
-		setupProductHoverEffect();
-		setupPhotoUploadPreview();
-		setupProductFrameOptions();
-		setupAddToCartHandlers();
-		setupQuantityControls();
-		setupSmoothScrolling();
-		setupStickyNavbar();
-		setupLazyLoading();
-		setupCheckoutValidation();
-		setupAdminAddProductForm();
-		setupProductMediaSlider();
-		setupAnimatedTestimonials();
-		setupShippingPolicyPopup();
-		setupRefundPolicyPopup();
-		setupFaqPopup();
-		setupTermsPopup();
-		setupDailyVisitorTracking();
-		setupProductMockupStudio();
-		updateCartBadges();
+		// Policy/FAQ popups should always initialize first.
+		safeInit("setupShippingPolicyPopup", setupShippingPolicyPopup);
+		safeInit("setupRefundPolicyPopup", setupRefundPolicyPopup);
+		safeInit("setupFaqPopup", setupFaqPopup);
+		safeInit("setupTermsPopup", setupTermsPopup);
+
+		safeInit("setupMobileNavToggle", setupMobileNavToggle);
+		safeInit("setupProductHoverEffect", setupProductHoverEffect);
+		safeInit("setupPhotoUploadPreview", setupPhotoUploadPreview);
+		safeInit("setupProductFrameOptions", setupProductFrameOptions);
+		safeInit("setupAddToCartHandlers", setupAddToCartHandlers);
+		safeInit("setupQuantityControls", setupQuantityControls);
+		safeInit("setupSmoothScrolling", setupSmoothScrolling);
+		safeInit("setupStickyNavbar", setupStickyNavbar);
+		safeInit("setupLazyLoading", setupLazyLoading);
+		safeInit("setupCheckoutValidation", setupCheckoutValidation);
+		safeInit("setupAdminAddProductForm", setupAdminAddProductForm);
+		safeInit("setupProductMediaSlider", setupProductMediaSlider);
+		safeInit("setupAnimatedTestimonials", setupAnimatedTestimonials);
+		safeInit("setupDailyVisitorTracking", setupDailyVisitorTracking);
+		safeInit("setupProductMockupStudio", setupProductMockupStudio);
+		safeInit("updateCartBadges", updateCartBadges);
 		// Re-sync in case other scripts mutate localStorage/DOM after init.
-		window.setTimeout(updateCartBadges, 0);
-		window.setTimeout(updateCartBadges, 300);
+		window.setTimeout(() => safeInit("updateCartBadges(timeout-0)", updateCartBadges), 0);
+		window.setTimeout(() => safeInit("updateCartBadges(timeout-300)", updateCartBadges), 300);
 	}
 
 	window.addEventListener("storage", (event) => {
