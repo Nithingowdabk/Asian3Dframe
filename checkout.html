@@ -630,7 +630,7 @@
 
       let subtotal = 0;
       cart.forEach(i => { subtotal += (i.price || 0) * (i.quantity || 1); });
-      const shipping = subtotal >= 3000 ? 0 : 60;
+      const shipping = 0;
       const total = subtotal + shipping;
 
       items.innerHTML = cart.map(i => `

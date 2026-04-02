@@ -56,9 +56,7 @@ foreach ($body['items'] as $item) {
     $subtotal += $unitPrice * $quantity;
 }
 
-$shippingThreshold = 3000.0;
-$shippingFee = 60.0;
-$shipping = ($subtotal >= $shippingThreshold) ? 0.0 : $shippingFee;
+$shipping = 0.0;
 $total = round($subtotal + $shipping, 2);
 
 $amountPaise = (int) round($total * 100);

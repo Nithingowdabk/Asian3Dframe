@@ -215,10 +215,8 @@ foreach ($body['items'] as $item) {
     ];
 }
 
-/* Shipping: keep in sync with checkout UI */
-$shippingThreshold = 3000.0;
-$shippingFee = 60.0;
-$shipping = ($subtotal >= $shippingThreshold) ? 0.0 : $shippingFee;
+/* Shipping: free delivery for all orders */
+$shipping = 0.0;
 $total    = round($subtotal + $shipping, 2);
 
 /* ── Insert order ────────────────────────────────────────────────────── */
