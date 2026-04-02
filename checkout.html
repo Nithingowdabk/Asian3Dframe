@@ -411,26 +411,32 @@
               <div class="form-row">
                 <div class="form-group">
                   <label for="state">State <span class="req">*</span></label>
-                  <input type="text" id="state" placeholder="State" required/>
+                  <select id="state" required>
+                    <option value="">Select State</option>
+                  </select>
                   <span class="field-error" id="e_state"></span>
                 </div>
+                <div class="form-group">
+                  <label for="district">District <span class="req">*</span></label>
+                  <select id="district" required disabled>
+                    <option value="">Select District</option>
+                  </select>
+                  <span class="field-error" id="e_district"></span>
+                </div>
+              </div>
+              <div class="form-row">
                 <div class="form-group">
                   <label for="city">City <span class="req">*</span></label>
                   <input type="text" id="city" placeholder="City" required/>
                   <span class="field-error" id="e_city"></span>
                 </div>
                 <div class="form-group">
-                  <label for="district">District <span class="req">*</span></label>
-                  <input type="text" id="district" placeholder="District" required/>
-                  <span class="field-error" id="e_district"></span>
+                  <label for="pincode">Pincode <span class="req">*</span></label>
+                  <input type="text" id="pincode" placeholder="Pincode" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" minlength="6" required/>
+                  <span class="field-error" id="e_pincode"></span>
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group">
-                  <label for="pincode">Pincode <span class="req">*</span></label>
-                  <input type="text" id="pincode" placeholder="Pincode" required/>
-                  <span class="field-error" id="e_pincode"></span>
-                </div>
                 <div class="form-group">
                   <label for="notes">Order Notes</label>
                   <input type="text" id="notes" placeholder="Gift wrapping, special message…"/>
@@ -446,19 +452,9 @@
                       <span>Cash on Delivery</span>
                     </label>
                     <label class="pay-option">
-                      <input type="radio" name="payment_method" value="vodafone_cash" />
-                      <i class="fab fa-cc-visa"></i>
-                      <span>Vodafone Cash</span>
-                    </label>
-                    <label class="pay-option">
-                      <input type="radio" name="payment_method" value="instapay" />
-                      <i class="fas fa-university"></i>
-                      <span>Instapay</span>
-                    </label>
-                    <label class="pay-option">
                       <input type="radio" name="payment_method" value="razorpay" id="razorpayOption" />
-                      <img src="https://cdn.razorpay.com/static/assets/razorpay-glyph.svg" alt="Razorpay" style="height:1.4rem;margin-bottom:6px;"/>
-                      <span>Razorpay (UPI/Card)</span>
+                      <i class="fas fa-credit-card"></i>
+                      <span>Online Payment (UPI/Card)</span>
                     </label>
                   </div>
                 </div>
@@ -486,7 +482,7 @@
                 Place Order <i class="fas fa-check"></i>
               </button>
               <button type="button" class="btn btn-primary" id="payWithRazorpayBtn" style="display:none;margin-left:10px;background:#0b5fff;border-color:#0b5fff;">
-                Pay with Razorpay <i class="fas fa-bolt"></i>
+                Pay Online <i class="fas fa-bolt"></i>
               </button>
             </div>
           </div>
@@ -607,7 +603,7 @@
   </footer>
 
   <script src="assets/js/script.js"></script>
-    <!-- Razorpay JS SDK -->
+    <!-- Online payment SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     // ─── Checkout Page Script ───
@@ -691,6 +687,29 @@
       });
     }
 
+    function validateShippingFields() {
+      const fullName = document.getElementById('fullName')?.value.trim() || '';
+      const email = document.getElementById('email')?.value.trim() || '';
+      const phone = document.getElementById('phone')?.value.trim() || '';
+      const address = document.getElementById('address')?.value.trim() || '';
+      const state = document.getElementById('state')?.value.trim() || '';
+      const district = document.getElementById('district')?.value.trim() || '';
+      const city = document.getElementById('city')?.value.trim() || '';
+      const pincode = document.getElementById('pincode')?.value.trim() || '';
+
+      if (!fullName || !email || !phone || !address || !state || !district || !city || !pincode) {
+        alert('Please fill all required fields before continuing.');
+        return false;
+      }
+
+      if (!/^\d{6}$/.test(pincode)) {
+        alert('Pincode must be exactly 6 digits.');
+        return false;
+      }
+
+      return true;
+    }
+
     function attachStepNavigation() {
       const toStep2Btn = document.getElementById('toStep2Btn');
       const backToStep1Btn = document.getElementById('backToStep1Btn');
@@ -702,9 +721,20 @@
         return;
       }
 
+      const pincodeInput = document.getElementById('pincode');
+      if (pincodeInput) {
+        pincodeInput.addEventListener('input', function() {
+          this.value = String(this.value || '').replace(/\D/g, '').slice(0, 6);
+        });
+      }
+
       toStep2Btn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+
+        if (!validateShippingFields()) {
+          return;
+        }
         
         const cart = window.getCart ? window.getCart() : [];
         if (cart.length === 0) {
@@ -801,16 +831,7 @@
           alert('Your cart is empty!');
           return;
         }
-        const fullName = document.getElementById('fullName')?.value.trim() || '';
-        const email = document.getElementById('email')?.value.trim() || '';
-        const phone = document.getElementById('phone')?.value.trim() || '';
-        const address = document.getElementById('address')?.value.trim() || '';
-        const state = document.getElementById('state')?.value.trim() || '';
-        const city = document.getElementById('city')?.value.trim() || '';
-        const district = document.getElementById('district')?.value.trim() || '';
-        const pincode = document.getElementById('pincode')?.value.trim() || '';
-        if (!fullName || !email || !phone || !address || !state || !city || !district || !pincode) {
-          alert('Please fill all required fields before placing order.');
+        if (!validateShippingFields()) {
           return;
         }
         const payload = getOrderPayload(paymentMethod);
@@ -860,7 +881,7 @@
           e.stopPropagation();
           payWithRazorpayBtn.disabled = true;
           payWithRazorpayBtn.innerHTML = '<span class="spinner"></span> Initializing…';
-          // Prepare order details for backend to create Razorpay order
+          // Prepare order details for backend to create online payment order
           const payload = getOrderPayload('razorpay');
           try {
             const res = await fetch('php/razorpay_order.php', {
@@ -870,9 +891,9 @@
             });
             const data = await res.json();
             if (!res.ok || !data.success || !data.razorpay_order_id) {
-              throw new Error(data.message || 'Failed to initialize Razorpay payment.');
+              throw new Error(data.message || 'Failed to initialize online payment.');
             }
-            // Launch Razorpay checkout
+            // Launch online payment checkout
             const options = {
               key: data.razorpay_key_id,
               amount: data.amount,
@@ -897,22 +918,90 @@
             const rzp = new Razorpay(options);
             rzp.open();
           } catch (err) {
-            alert(err && err.message ? err.message : 'Could not start Razorpay payment.');
+            alert(err && err.message ? err.message : 'Could not start online payment.');
           } finally {
             payWithRazorpayBtn.disabled = false;
-            payWithRazorpayBtn.innerHTML = 'Pay with Razorpay <i class="fas fa-bolt"></i>';
+            payWithRazorpayBtn.innerHTML = 'Pay Online <i class="fas fa-bolt"></i>';
           }
         });
       }
     }
 
+    function initIndiaStateDistricts() {
+      const stateEl = document.getElementById('state');
+      const districtEl = document.getElementById('district');
+      if (!stateEl || !districtEl) return;
+
+      const indiaStateDistricts = {
+        'Andhra Pradesh': ['Anakapalli', 'Anantapur', 'Annamayya', 'Bapatla', 'Chittoor', 'East Godavari', 'Eluru', 'Guntur', 'Kakinada', 'Krishna', 'Kurnool', 'Nandyal', 'NTR', 'Palnadu', 'Parvathipuram Manyam', 'Prakasam', 'Srikakulam', 'Sri Sathya Sai', 'Tirupati', 'Visakhapatnam', 'Vizianagaram', 'West Godavari', 'YSR Kadapa'],
+        'Arunachal Pradesh': ['Anjaw', 'Changlang', 'Dibang Valley', 'East Kameng', 'East Siang', 'Kamle', 'Kra Daadi', 'Kurung Kumey', 'Leparada', 'Lohit', 'Longding', 'Lower Dibang Valley', 'Lower Siang', 'Lower Subansiri', 'Namsai', 'Pakke Kessang', 'Papum Pare', 'Shi Yomi', 'Siang', 'Tawang', 'Tirap', 'Upper Siang', 'Upper Subansiri', 'West Kameng', 'West Siang'],
+        Assam: ['Bajali', 'Baksa', 'Barpeta', 'Biswanath', 'Bongaigaon', 'Cachar', 'Charaideo', 'Chirang', 'Darrang', 'Dhemaji', 'Dhubri', 'Dibrugarh', 'Dima Hasao', 'Goalpara', 'Golaghat', 'Hailakandi', 'Hojai', 'Jorhat', 'Kamrup', 'Kamrup Metropolitan', 'Karbi Anglong', 'Karimganj', 'Kokrajhar', 'Lakhimpur', 'Majuli', 'Morigaon', 'Nagaon', 'Nalbari', 'Sivasagar', 'Sonitpur', 'South Salmara-Mankachar', 'Tamulpur', 'Tinsukia', 'Udalguri', 'West Karbi Anglong'],
+        Bihar: ['Araria', 'Arwal', 'Aurangabad', 'Banka', 'Begusarai', 'Bhagalpur', 'Bhojpur', 'Buxar', 'Darbhanga', 'East Champaran', 'Gaya', 'Gopalganj', 'Jamui', 'Jehanabad', 'Kaimur', 'Katihar', 'Khagaria', 'Kishanganj', 'Lakhisarai', 'Madhepura', 'Madhubani', 'Munger', 'Muzaffarpur', 'Nalanda', 'Nawada', 'Patna', 'Purnia', 'Rohtas', 'Saharsa', 'Samastipur', 'Saran', 'Sheikhpura', 'Sheohar', 'Sitamarhi', 'Siwan', 'Supaul', 'Vaishali', 'West Champaran'],
+        Chhattisgarh: ['Balod', 'Baloda Bazar', 'Balrampur', 'Bastar', 'Bemetara', 'Bijapur', 'Bilaspur', 'Dantewada', 'Dhamtari', 'Durg', 'Gariaband', 'Gaurela-Pendra-Marwahi', 'Janjgir-Champa', 'Jashpur', 'Kabirdham', 'Kanker', 'Khairagarh-Chhuikhadan-Gandai', 'Kondagaon', 'Korba', 'Koriya', 'Mahasamund', 'Manendragarh-Chirmiri-Bharatpur', 'Mohla-Manpur-Ambagarh Chowki', 'Mungeli', 'Narayanpur', 'Raigarh', 'Raipur', 'Rajnandgaon', 'Sakti', 'Sarangarh-Bilaigarh', 'Sukma', 'Surajpur', 'Surguja'],
+        Goa: ['North Goa', 'South Goa'],
+        Gujarat: ['Ahmedabad', 'Amreli', 'Anand', 'Aravalli', 'Banaskantha', 'Bharuch', 'Bhavnagar', 'Botad', 'Chhota Udaipur', 'Dahod', 'Dang', 'Devbhoomi Dwarka', 'Gandhinagar', 'Gir Somnath', 'Jamnagar', 'Junagadh', 'Kheda', 'Kutch', 'Mahisagar', 'Mehsana', 'Morbi', 'Narmada', 'Navsari', 'Panchmahal', 'Patan', 'Porbandar', 'Rajkot', 'Sabarkantha', 'Surat', 'Surendranagar', 'Tapi', 'Vadodara', 'Valsad'],
+        Haryana: ['Ambala', 'Bhiwani', 'Charkhi Dadri', 'Faridabad', 'Fatehabad', 'Gurugram', 'Hisar', 'Jhajjar', 'Jind', 'Kaithal', 'Karnal', 'Kurukshetra', 'Mahendragarh', 'Nuh', 'Palwal', 'Panchkula', 'Panipat', 'Rewari', 'Rohtak', 'Sirsa', 'Sonipat', 'Yamunanagar'],
+        'Himachal Pradesh': ['Bilaspur', 'Chamba', 'Hamirpur', 'Kangra', 'Kinnaur', 'Kullu', 'Lahaul and Spiti', 'Mandi', 'Shimla', 'Sirmaur', 'Solan', 'Una'],
+        Jharkhand: ['Bokaro', 'Chatra', 'Deoghar', 'Dhanbad', 'Dumka', 'East Singhbhum', 'Garhwa', 'Giridih', 'Godda', 'Gumla', 'Hazaribagh', 'Jamtara', 'Khunti', 'Koderma', 'Latehar', 'Lohardaga', 'Pakur', 'Palamu', 'Ramgarh', 'Ranchi', 'Sahibganj', 'Seraikela Kharsawan', 'Simdega', 'West Singhbhum'],
+        Karnataka: ['Bagalkote', 'Ballari', 'Belagavi', 'Bengaluru Rural', 'Bengaluru Urban', 'Bidar', 'Chamarajanagar', 'Chikkaballapur', 'Chikkamagaluru', 'Chitradurga', 'Dakshina Kannada', 'Davanagere', 'Dharwad', 'Gadag', 'Hassan', 'Haveri', 'Kalaburagi', 'Kodagu', 'Kolar', 'Koppal', 'Mandya', 'Mysuru', 'Raichur', 'Ramanagara', 'Shivamogga', 'Tumakuru', 'Udupi', 'Uttara Kannada', 'Vijayapura', 'Yadgir'],
+        Kerala: ['Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam', 'Kozhikode', 'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'],
+        'Madhya Pradesh': ['Agar Malwa', 'Alirajpur', 'Anuppur', 'Ashoknagar', 'Balaghat', 'Barwani', 'Betul', 'Bhind', 'Bhopal', 'Burhanpur', 'Chhatarpur', 'Chhindwara', 'Damoh', 'Datia', 'Dewas', 'Dhar', 'Dindori', 'Guna', 'Gwalior', 'Harda', 'Indore', 'Jabalpur', 'Jhabua', 'Katni', 'Khandwa', 'Khargone', 'Mandla', 'Mandsaur', 'Morena', 'Narmadapuram', 'Narsinghpur', 'Neemuch', 'Niwari', 'Panna', 'Raisen', 'Rajgarh', 'Ratlam', 'Rewa', 'Sagar', 'Satna', 'Sehore', 'Seoni', 'Shahdol', 'Shajapur', 'Sheopur', 'Shivpuri', 'Sidhi', 'Singrauli', 'Tikamgarh', 'Ujjain', 'Umaria', 'Vidisha'],
+        Maharashtra: ['Ahmednagar', 'Akola', 'Amravati', 'Aurangabad', 'Beed', 'Bhandara', 'Buldhana', 'Chandrapur', 'Dhule', 'Gadchiroli', 'Gondia', 'Hingoli', 'Jalgaon', 'Jalna', 'Kolhapur', 'Latur', 'Mumbai City', 'Mumbai Suburban', 'Nagpur', 'Nanded', 'Nandurbar', 'Nashik', 'Osmanabad', 'Palghar', 'Parbhani', 'Pune', 'Raigad', 'Ratnagiri', 'Sangli', 'Satara', 'Sindhudurg', 'Solapur', 'Thane', 'Wardha', 'Washim', 'Yavatmal'],
+        Manipur: ['Bishnupur', 'Chandel', 'Churachandpur', 'Imphal East', 'Imphal West', 'Jiribam', 'Kakching', 'Kamjong', 'Kangpokpi', 'Noney', 'Pherzawl', 'Senapati', 'Tamenglong', 'Tengnoupal', 'Thoubal', 'Ukhrul'],
+        Meghalaya: ['East Garo Hills', 'East Jaintia Hills', 'East Khasi Hills', 'North Garo Hills', 'Ri Bhoi', 'South Garo Hills', 'South West Garo Hills', 'South West Khasi Hills', 'West Garo Hills', 'West Jaintia Hills', 'West Khasi Hills'],
+        Mizoram: ['Aizawl', 'Champhai', 'Hnahthial', 'Khawzawl', 'Kolasib', 'Lawngtlai', 'Lunglei', 'Mamit', 'Saiha', 'Saitual', 'Serchhip'],
+        Nagaland: ['Chumukedima', 'Dimapur', 'Kiphire', 'Kohima', 'Longleng', 'Mokokchung', 'Mon', 'Niuland', 'Noklak', 'Peren', 'Phek', 'Shamator', 'Tseminyu', 'Tuensang', 'Wokha', 'Zunheboto'],
+        Odisha: ['Angul', 'Balangir', 'Balasore', 'Bargarh', 'Bhadrak', 'Boudh', 'Cuttack', 'Deogarh', 'Dhenkanal', 'Gajapati', 'Ganjam', 'Jagatsinghpur', 'Jajpur', 'Jharsuguda', 'Kalahandi', 'Kandhamal', 'Kendrapara', 'Kendujhar', 'Khordha', 'Koraput', 'Malkangiri', 'Mayurbhanj', 'Nabarangpur', 'Nayagarh', 'Nuapada', 'Puri', 'Rayagada', 'Sambalpur', 'Subarnapur', 'Sundargarh'],
+        Punjab: ['Amritsar', 'Barnala', 'Bathinda', 'Faridkot', 'Fatehgarh Sahib', 'Fazilka', 'Ferozepur', 'Gurdaspur', 'Hoshiarpur', 'Jalandhar', 'Kapurthala', 'Ludhiana', 'Malerkotla', 'Mansa', 'Moga', 'Mohali', 'Muktsar', 'Pathankot', 'Patiala', 'Rupnagar', 'Sangrur', 'Shaheed Bhagat Singh Nagar', 'Tarn Taran'],
+        Rajasthan: ['Ajmer', 'Alwar', 'Anupgarh', 'Balotra', 'Banswara', 'Baran', 'Barmer', 'Beawar', 'Bharatpur', 'Bhilwara', 'Bikaner', 'Bundi', 'Chittorgarh', 'Churu', 'Dausa', 'Deeg', 'Dholpur', 'Didwana Kuchaman', 'Dudu', 'Dungarpur', 'Gangapur City', 'Hanumangarh', 'Jaipur', 'Jaipur Rural', 'Jaisalmer', 'Jalore', 'Jhalawar', 'Jhunjhunu', 'Jodhpur', 'Jodhpur Rural', 'Kekri', 'Kota', 'Kotputli-Behror', 'Nagaur', 'Neem Ka Thana', 'Pali', 'Phalodi', 'Pratapgarh', 'Rajsamand', 'Salumber', 'Sanchore', 'Sawai Madhopur', 'Shahpura', 'Sikar', 'Sirohi', 'Sri Ganganagar', 'Tonk', 'Udaipur'],
+        Sikkim: ['Gangtok', 'Mangan', 'Namchi', 'Pakyong', 'Soreng', 'Gyalshing'],
+        'Tamil Nadu': ['Ariyalur', 'Chengalpattu', 'Chennai', 'Coimbatore', 'Cuddalore', 'Dharmapuri', 'Dindigul', 'Erode', 'Kallakurichi', 'Kanchipuram', 'Kanniyakumari', 'Karur', 'Krishnagiri', 'Madurai', 'Mayiladuthurai', 'Nagapattinam', 'Namakkal', 'Nilgiris', 'Perambalur', 'Pudukkottai', 'Ramanathapuram', 'Ranipet', 'Salem', 'Sivaganga', 'Tenkasi', 'Thanjavur', 'Theni', 'Thoothukudi', 'Tiruchirappalli', 'Tirunelveli', 'Tirupathur', 'Tiruppur', 'Tiruvallur', 'Tiruvannamalai', 'Tiruvarur', 'Vellore', 'Viluppuram', 'Virudhunagar'],
+        Telangana: ['Adilabad', 'Bhadradri Kothagudem', 'Hanamkonda', 'Hyderabad', 'Jagtial', 'Jangaon', 'Jayashankar Bhupalpally', 'Jogulamba Gadwal', 'Kamareddy', 'Karimnagar', 'Khammam', 'Komaram Bheem', 'Mahabubabad', 'Mahabubnagar', 'Mancherial', 'Medak', 'Medchal-Malkajgiri', 'Mulugu', 'Nagarkurnool', 'Nalgonda', 'Narayanpet', 'Nirmal', 'Nizamabad', 'Peddapalli', 'Rajanna Sircilla', 'Ranga Reddy', 'Sangareddy', 'Siddipet', 'Suryapet', 'Vikarabad', 'Wanaparthy', 'Warangal', 'Yadadri Bhuvanagiri'],
+        Tripura: ['Dhalai', 'Gomati', 'Khowai', 'North Tripura', 'Sepahijala', 'South Tripura', 'Unakoti', 'West Tripura'],
+        'Uttar Pradesh': ['Agra', 'Aligarh', 'Ambedkar Nagar', 'Amethi', 'Amroha', 'Auraiya', 'Ayodhya', 'Azamgarh', 'Baghpat', 'Bahraich', 'Ballia', 'Balrampur', 'Banda', 'Barabanki', 'Bareilly', 'Basti', 'Bhadohi', 'Bijnor', 'Budaun', 'Bulandshahr', 'Chandauli', 'Chitrakoot', 'Deoria', 'Etah', 'Etawah', 'Farrukhabad', 'Fatehpur', 'Firozabad', 'Gautam Buddha Nagar', 'Ghaziabad', 'Ghazipur', 'Gonda', 'Gorakhpur', 'Hamirpur', 'Hapur', 'Hardoi', 'Hathras', 'Jalaun', 'Jaunpur', 'Jhansi', 'Kannauj', 'Kanpur Dehat', 'Kanpur Nagar', 'Kasganj', 'Kaushambi', 'Kheri', 'Kushinagar', 'Lalitpur', 'Lucknow', 'Maharajganj', 'Mahoba', 'Mainpuri', 'Mathura', 'Mau', 'Meerut', 'Mirzapur', 'Moradabad', 'Muzaffarnagar', 'Pilibhit', 'Pratapgarh', 'Prayagraj', 'Raebareli', 'Rampur', 'Saharanpur', 'Sambhal', 'Sant Kabir Nagar', 'Shahjahanpur', 'Shamli', 'Shrawasti', 'Siddharthnagar', 'Sitapur', 'Sonbhadra', 'Sultanpur', 'Unnao', 'Varanasi'],
+        Uttarakhand: ['Almora', 'Bageshwar', 'Chamoli', 'Champawat', 'Dehradun', 'Haridwar', 'Nainital', 'Pauri Garhwal', 'Pithoragarh', 'Rudraprayag', 'Tehri Garhwal', 'Udham Singh Nagar', 'Uttarkashi'],
+        'West Bengal': ['Alipurduar', 'Bankura', 'Birbhum', 'Cooch Behar', 'Dakshin Dinajpur', 'Darjeeling', 'Hooghly', 'Howrah', 'Jalpaiguri', 'Jhargram', 'Kalimpong', 'Kolkata', 'Malda', 'Murshidabad', 'Nadia', 'North 24 Parganas', 'Paschim Bardhaman', 'Paschim Medinipur', 'Purba Bardhaman', 'Purba Medinipur', 'Purulia', 'South 24 Parganas', 'Uttar Dinajpur'],
+        'Andaman and Nicobar Islands': ['Nicobar', 'North and Middle Andaman', 'South Andaman'],
+        Chandigarh: ['Chandigarh'],
+        'Dadra and Nagar Haveli and Daman and Diu': ['Dadra and Nagar Haveli', 'Daman', 'Diu'],
+        Delhi: ['Central Delhi', 'East Delhi', 'New Delhi', 'North Delhi', 'North East Delhi', 'North West Delhi', 'Shahdara', 'South Delhi', 'South East Delhi', 'South West Delhi', 'West Delhi'],
+        'Jammu and Kashmir': ['Anantnag', 'Bandipora', 'Baramulla', 'Budgam', 'Doda', 'Ganderbal', 'Jammu', 'Kathua', 'Kishtwar', 'Kulgam', 'Kupwara', 'Poonch', 'Pulwama', 'Rajouri', 'Ramban', 'Reasi', 'Samba', 'Shopian', 'Srinagar', 'Udhampur'],
+        Ladakh: ['Kargil', 'Leh'],
+        Lakshadweep: ['Lakshadweep'],
+        Puducherry: ['Karaikal', 'Mahe', 'Puducherry', 'Yanam']
+      };
+
+      const stateNames = Object.keys(indiaStateDistricts).sort((a, b) => a.localeCompare(b));
+      stateEl.innerHTML = '<option value="">Select State </option>' + stateNames
+        .map((name) => `<option value="${name}">${name}</option>`)
+        .join('');
+
+      function populateDistricts(stateName) {
+        const districts = stateName && indiaStateDistricts[stateName] ? indiaStateDistricts[stateName] : [];
+        districtEl.innerHTML = '<option value="">Select District</option>' + districts
+          .slice()
+          .sort((a, b) => a.localeCompare(b))
+          .map((name) => `<option value="${name}">${name}</option>`)
+          .join('');
+        districtEl.disabled = districts.length === 0;
+      }
+
+      stateEl.addEventListener('change', function() {
+        populateDistricts(stateEl.value);
+      });
+
+      populateDistricts(stateEl.value);
+    }
+
     // Attach listeners as soon as DOM is ready
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function() {
+        initIndiaStateDistricts();
         renderSidebar();
         attachStepNavigation();
       });
     } else {
+      initIndiaStateDistricts();
       renderSidebar();
       attachStepNavigation();
     }

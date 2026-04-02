@@ -332,6 +332,9 @@
 				} else {
 					el.textContent = String(count);
 				}
+				if (el.classList && el.classList.contains("cart-badge")) {
+					el.classList.toggle("visible", count > 0);
+				}
 			});
 		});
 	}
@@ -1754,7 +1757,6 @@
 		setupCheckoutValidation();
 		setupAdminAddProductForm();
 		setupProductMediaSlider();
-		setupProductImageZoomViewer();
 		setupAnimatedTestimonials();
 		setupDailyVisitorTracking();
 		setupProductMockupStudio();
