@@ -77,7 +77,15 @@ $readSecret = static function (string $name): string {
 };
 
 $keyId = $readSecret('rzp_live_SYVUaDMRcwcAWf');
-$keySecret = $readSecret('bBpZVmKNwgE5gDnv84EJPnRH');
+$keySecret = $readSecret('BpZVmKNwgE5gDnv84EJPnRH');
+
+// Fallback for shared hosting/manual setup where env vars are unavailable.
+if ($keyId === '') {
+    $keyId = 'rzp_live_SYVUaDMRcwcAWf';
+}
+if ($keySecret === '') {
+    $keySecret = 'bBpZVmKNwgE5gDnv84EJPnRH';
+}
 if ($keyId === '' || $keySecret === '') {
     http_response_code(500);
     echo json_encode([
