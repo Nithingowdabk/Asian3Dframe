@@ -244,6 +244,58 @@
       font-size:1rem;
     }
 
+    .order-ticket {
+      margin: 0 auto 20px;
+      max-width: 620px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+      overflow: hidden;
+    }
+    .order-ticket-head {
+      padding: 14px 18px;
+      background: var(--light);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .order-ticket-meta {
+      padding: 12px 18px;
+      color: var(--mid);
+      font-size: .88rem;
+      border-bottom: 1px dashed rgba(0,0,0,.12);
+    }
+    .order-ticket-items { padding: 0 18px; }
+    .ticket-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 11px 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      font-size: .9rem;
+      color: var(--dark-2);
+    }
+    .ticket-item:last-child { border-bottom: none; }
+    .ticket-item-name { font-weight: 600; color: var(--dark); }
+    .ticket-item-sub { font-size: .8rem; color: var(--mid); display: block; margin-top: 2px; }
+    .order-ticket-total {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      background: #fcfaf8;
+      border-top: 1px solid rgba(0,0,0,.06);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
     /* ── Order summary sidebar ── */
     .order-sidebar {
       background:#fff;
@@ -369,7 +421,7 @@
     </div>
     <span class="step-arrow"><i class="fas fa-chevron-right"></i></span>
     <div class="c-step" id="si3">
-      <span class="c-step-num">3</span> Confirm
+      <span class="c-step-num">3</span> Ticket
     </div>
   </div>
 
@@ -844,6 +896,47 @@
           return;
         }
         const payload = getOrderPayload(paymentMethod);
+        const ticketItems = cart.map(item => ({
+          name: item.name || 'Product',
+          quantity: Number(item.quantity || 1),
+          unitPrice: Number(item.price || 0),
+        }));
+
+        function renderOrderTicket(orderId) {
+          const box = document.getElementById('orderTicket');
+          const ticketOrderId = document.getElementById('ticketOrderId');
+          const ticketPaymentMethod = document.getElementById('ticketPaymentMethod');
+          const ticketEmail = document.getElementById('ticketEmail');
+          const ticketItemsEl = document.getElementById('ticketItems');
+          const ticketTotal = document.getElementById('ticketTotal');
+          if (!box || !ticketItemsEl || !ticketTotal) return;
+
+          const paymentText = (payload.payment_method || 'cod') === 'razorpay'
+            ? 'Online Payment'
+            : 'Cash on Delivery';
+
+          let total = 0;
+          ticketItemsEl.innerHTML = ticketItems.map(i => {
+            const line = i.unitPrice * i.quantity;
+            total += line;
+            return `
+              <div class="ticket-item">
+                <div>
+                  <span class="ticket-item-name">${i.name}</span>
+                  <span class="ticket-item-sub">Qty: ${i.quantity} x ${i.unitPrice.toFixed(2)}</span>
+                </div>
+                <strong>${line.toFixed(2)}</strong>
+              </div>
+            `;
+          }).join('');
+
+          if (ticketOrderId) ticketOrderId.textContent = String(orderId || '—');
+          if (ticketPaymentMethod) ticketPaymentMethod.textContent = paymentText;
+          if (ticketEmail) ticketEmail.textContent = payload.email || '—';
+          ticketTotal.textContent = total.toFixed(2);
+          box.style.display = 'block';
+        }
+
         try {
           const res = await fetch('php/place_order.php', {
             method: 'POST',
@@ -864,8 +957,9 @@
           updateStepIndicator(3);
           const confirmedEmail = document.getElementById('confirmedEmail');
           const confirmedOrderId = document.getElementById('confirmedOrderId');
-          if (confirmedEmail) confirmedEmail.textContent = email;
+          if (confirmedEmail) confirmedEmail.textContent = payload.email || '—';
           if (confirmedOrderId) confirmedOrderId.textContent = String(data.order_id || '—');
+          renderOrderTicket(data.order_id || '—');
           if (window.saveCart) window.saveCart([]);
           if (window.updateCartBadges) window.updateCartBadges();
           renderSidebar();
