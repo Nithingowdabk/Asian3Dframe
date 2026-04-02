@@ -1727,6 +1727,431 @@
 		track.classList.add("is-animated");
 	}
 
+	function setupShippingPolicyPopup() {
+		if (qs("#g4y-shipping-policy-modal")) return;
+
+		const style = document.createElement("style");
+		style.id = "g4y-shipping-policy-style";
+		style.textContent = `
+			.g4y-policy-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(17, 24, 39, 0.65);
+				backdrop-filter: blur(2px);
+				display: none;
+				align-items: center;
+				justify-content: center;
+				padding: 16px;
+				z-index: 99999;
+			}
+			.g4y-policy-overlay.is-open { display: flex; }
+			.g4y-policy-modal {
+				width: min(900px, 96vw);
+				max-height: 90vh;
+				overflow: hidden;
+				background: #ffffff;
+				border-radius: 16px;
+				box-shadow: 0 20px 60px rgba(0,0,0,.25);
+				display: flex;
+				flex-direction: column;
+			}
+			.g4y-policy-head {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 12px;
+				padding: 16px 18px;
+				border-bottom: 1px solid rgba(0,0,0,.08);
+			}
+			.g4y-policy-title {
+				margin: 0;
+				font: 700 1.15rem/1.2 Manrope, Inter, Arial, sans-serif;
+				color: #111827;
+			}
+			.g4y-policy-close {
+				width: 36px;
+				height: 36px;
+				border: 0;
+				border-radius: 10px;
+				background: #f3f4f6;
+				font-size: 1.2rem;
+				line-height: 1;
+				cursor: pointer;
+			}
+			.g4y-policy-close:hover { background: #e5e7eb; }
+			.g4y-policy-body {
+				padding: 18px;
+				overflow: auto;
+				font: 500 0.93rem/1.65 Manrope, Inter, Arial, sans-serif;
+				color: #374151;
+			}
+			.g4y-policy-body h4 {
+				margin: 14px 0 6px;
+				font: 700 1rem/1.3 Manrope, Inter, Arial, sans-serif;
+				color: #111827;
+			}
+			.g4y-policy-body p { margin: 8px 0; }
+		`;
+		document.head.appendChild(style);
+
+		const overlay = document.createElement("div");
+		overlay.className = "g4y-policy-overlay";
+		overlay.id = "g4y-shipping-policy-modal";
+		overlay.innerHTML = `
+			<div class="g4y-policy-modal" role="dialog" aria-modal="true" aria-label="Shipping Policy">
+				<div class="g4y-policy-head">
+					<h3 class="g4y-policy-title">Shipping Policy</h3>
+					<button type="button" class="g4y-policy-close" aria-label="Close">&times;</button>
+				</div>
+				<div class="g4y-policy-body">
+					<p><strong>Effective Date:</strong> 17th December 2025</p>
+					<p>Thank you for shopping with Asian3Dframes. This Shipping Policy explains how we process, dispatch, and deliver orders within India and internationally. By placing an order on www.asian3dframes.com, you agree to the terms mentioned below.</p>
+
+					<h4>1. Shipping Coverage</h4>
+					<p>We currently offer shipping to:</p>
+					<p>All locations across India, including cities, towns, and remote areas.</p>
+					<p>International destinations, with worldwide delivery to most countries.</p>
+					<p>If your location is not serviceable, we will notify you during the order process.</p>
+
+					<h4>2. Order Processing Time</h4>
+					<p>All orders are carefully processed, packed, and dispatched within 2 working days from the date of order confirmation. We ensure safe packaging to protect frames and maintain product quality.</p>
+
+					<h4>3. Delivery Timeline</h4>
+					<p><strong>Within India:</strong> Estimated delivery time is 4 to 6 business days after dispatch, depending on the delivery location.</p>
+					<p><strong>International Deliveries:</strong> Estimated delivery time is 10 to 15 business days. Delivery time may vary based on customs clearance, destination country regulations, and postal services.</p>
+					<p>Please note: weekends, public holidays, and unforeseen circumstances may affect delivery timelines.</p>
+
+					<h4>4. Shipping Charges</h4>
+					<p><strong>Domestic Shipping (India):</strong></p>
+					<p>Rs 65 for a single product.</p>
+					<p>Rs 105 for multiple products in a single order.</p>
+					<p><strong>International Shipping:</strong> Charges vary based on destination country, location, and package weight. Final charges will be shown before order confirmation.</p>
+
+					<h4>5. Shipping Partner</h4>
+					<p>All orders are shipped via reliable courier services (such as India Post or other logistics partners) to ensure safe and timely delivery.</p>
+
+					<h4>6. Order Tracking</h4>
+					<p>Tracking details may not be provided automatically. Customers can contact us anytime for order status updates or shipping-related queries.</p>
+
+					<h4>7. Shipping Delays Disclaimer</h4>
+					<p>While we aim for timely delivery, delays may occur due to factors beyond our control such as weather conditions, courier or postal delays, customs clearance for international orders, strikes, or unforeseen disruptions.</p>
+					<p>Asian3Dframes is not responsible for delays caused by these external factors.</p>
+
+					<h4>8. Damage During Transit</h4>
+					<p>All products are securely packed to minimize damage. However, once the shipment is handed over to the courier, we are not liable for any damage during transit.</p>
+
+					<h4>9. Customer Support</h4>
+					<p>For shipping-related queries or assistance:</p>
+					<p>Email: asian3dframes@gmail.com</p>
+					<p>WhatsApp chat support is available.</p>
+					<p>Website: www.asian3dframes.com</p>
+				</div>
+			</div>
+		`;
+		document.body.appendChild(overlay);
+
+		const closeBtn = qs(".g4y-policy-close", overlay);
+		const close = () => {
+			overlay.classList.remove("is-open");
+			document.body.style.overflow = "";
+		};
+		const open = () => {
+			overlay.classList.add("is-open");
+			document.body.style.overflow = "hidden";
+		};
+
+		closeBtn?.addEventListener("click", close);
+		overlay.addEventListener("click", (event) => {
+			if (event.target === overlay) close();
+		});
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && overlay.classList.contains("is-open")) close();
+		});
+
+		// Auto-wire existing footer links that read "Shipping Policy".
+		qsa("a").forEach((link) => {
+			const text = String(link.textContent || "").trim().toLowerCase();
+			if (text === "shipping policy") {
+				link.setAttribute("href", "#");
+				link.setAttribute("data-shipping-policy-trigger", "1");
+			}
+		});
+
+		document.addEventListener("click", (event) => {
+			const trigger = event.target instanceof Element
+				? event.target.closest("a[data-shipping-policy-trigger]")
+				: null;
+			if (!trigger) return;
+			event.preventDefault();
+			open();
+		});
+	}
+
+	function setupRefundPolicyPopup() {
+		if (qs("#g4y-refund-policy-modal")) return;
+
+		const overlay = document.createElement("div");
+		overlay.className = "g4y-policy-overlay";
+		overlay.id = "g4y-refund-policy-modal";
+		overlay.innerHTML = `
+			<div class="g4y-policy-modal" role="dialog" aria-modal="true" aria-label="Refund and Return Policy">
+				<div class="g4y-policy-head">
+					<h3 class="g4y-policy-title">Refund and Return Policy</h3>
+					<button type="button" class="g4y-policy-close" aria-label="Close">&times;</button>
+				</div>
+				<div class="g4y-policy-body">
+					<p><strong>Effective Date:</strong> 17th December 2025</p>
+					<p>Thank you for shopping with Asian3Dframes. We take pride in delivering high-quality and well-crafted photo frames. Please read our policy carefully regarding returns and refunds.</p>
+
+					<h4>1. Return Policy</h4>
+					<p>We do not accept returns once the product has been delivered. As our products are customized/decorative items, they are considered non-returnable and non-exchangeable under normal conditions such as change of mind, personal preference, incorrect address provided by the customer, or delivery delays due to recipient unavailability.</p>
+
+					<h4>2. Refund Eligibility</h4>
+					<p>Refunds will be considered only if the customer does not receive the product within 6 to 8 business days after dispatch confirmation.</p>
+					<p>In such cases, the customer must contact us within 2 days after the delivery timeline has passed. The request will be verified with our shipping partner before approval.</p>
+
+					<h4>3. Refund Request Process</h4>
+					<p>If your order qualifies for a refund, contact us via email or WhatsApp and provide your Order ID and order details. Additional verification with courier records may be required before approval.</p>
+
+					<h4>4. Refund Method</h4>
+					<p>Refunds will be processed to the original payment method. Refund initiation will take 3 to 4 working days after approval. The credited amount may take additional time depending on your bank or payment provider.</p>
+
+					<h4>5. Non-Refundable Conditions</h4>
+					<p>Refunds will not be issued if the product is successfully delivered, an incorrect or incomplete address is provided, the customer fails to contact within the allowed time, or the request is based on personal preference or change of mind.</p>
+
+					<h4>6. Replacements</h4>
+					<p>We currently do not offer replacements for any products.</p>
+
+					<h4>7. Contact Us</h4>
+					<p>For refund-related queries or assistance:</p>
+					<p>Email: asian3dframes@gmail.com</p>
+					<p>WhatsApp chat support is available.</p>
+					<p>Website: www.asian3dframes.com</p>
+				</div>
+			</div>
+		`;
+		document.body.appendChild(overlay);
+
+		const closeBtn = qs(".g4y-policy-close", overlay);
+		const close = () => {
+			overlay.classList.remove("is-open");
+			document.body.style.overflow = "";
+		};
+		const open = () => {
+			overlay.classList.add("is-open");
+			document.body.style.overflow = "hidden";
+		};
+
+		closeBtn?.addEventListener("click", close);
+		overlay.addEventListener("click", (event) => {
+			if (event.target === overlay) close();
+		});
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && overlay.classList.contains("is-open")) close();
+		});
+
+		qsa("a").forEach((link) => {
+			const text = String(link.textContent || "").trim().toLowerCase();
+			if (text === "returns & refunds") {
+				link.setAttribute("href", "#");
+				link.setAttribute("data-refund-policy-trigger", "1");
+			}
+		});
+
+		document.addEventListener("click", (event) => {
+			const trigger = event.target instanceof Element
+				? event.target.closest("a[data-refund-policy-trigger]")
+				: null;
+			if (!trigger) return;
+			event.preventDefault();
+			open();
+		});
+	}
+
+	function setupFaqPopup() {
+		if (qs("#g4y-faq-modal")) return;
+
+		const overlay = document.createElement("div");
+		overlay.className = "g4y-policy-overlay";
+		overlay.id = "g4y-faq-modal";
+		overlay.innerHTML = `
+			<div class="g4y-policy-modal" role="dialog" aria-modal="true" aria-label="Frequently Asked Questions">
+				<div class="g4y-policy-head">
+					<h3 class="g4y-policy-title">Frequently Asked Questions (FAQ)</h3>
+					<button type="button" class="g4y-policy-close" aria-label="Close">&times;</button>
+				</div>
+				<div class="g4y-policy-body">
+					<h4>1. How do I place an order?</h4>
+					<p>You can browse products on www.asian3dframes.com, select your preferred frame, and place your order directly through the website. For custom orders, you can contact us via WhatsApp.</p>
+
+					<h4>2. Do you offer customized frames?</h4>
+					<p>Yes. We offer customized frames based on your requirements. You can share your design, photo, or idea through WhatsApp and we will create it for you.</p>
+
+					<h4>3. What are the delivery timelines?</h4>
+					<p>Within India: 4 to 6 business days after dispatch. International: 10 to 15 business days. Delivery time may vary based on location and external factors.</p>
+
+					<h4>4. How are the products packed?</h4>
+					<p>All frames are securely packed using protective materials to ensure they reach you safely without damage.</p>
+
+					<h4>5. What payment methods do you accept?</h4>
+					<p>We accept secure online payments including UPI, debit and credit cards, and other available payment options shown at checkout.</p>
+
+					<h4>6. Can I return or exchange a product?</h4>
+					<p>No. We do not accept returns or exchanges once the product is delivered. Please review product details carefully before placing an order.</p>
+
+					<h4>7. When will I get a refund?</h4>
+					<p>Refunds are only applicable if the product is not delivered within the specified time. Please refer to our Refund Policy for complete details.</p>
+
+					<h4>8. Do you deliver to all locations?</h4>
+					<p>Yes, we deliver across India and to most international locations. If your area is not serviceable, we will inform you during order placement.</p>
+
+					<h4>9. How can I contact customer support?</h4>
+					<p>Email: asian3dframes@gmail.com. WhatsApp chat support is available. You can also use the website contact page.</p>
+
+					<h4>10. Are the product images real?</h4>
+					<p>Yes, images shown are real product representations. Slight color variations may occur due to lighting or screen settings.</p>
+
+					<h4>11. Can I track my order?</h4>
+					<p>Tracking may not be automatically provided. You can contact us anytime for order status updates.</p>
+
+					<h4>12. What if my product is damaged?</h4>
+					<p>We ensure safe packaging, but if you receive a damaged product, contact us immediately with photos for assistance.</p>
+				</div>
+			</div>
+		`;
+		document.body.appendChild(overlay);
+
+		const closeBtn = qs(".g4y-policy-close", overlay);
+		const close = () => {
+			overlay.classList.remove("is-open");
+			document.body.style.overflow = "";
+		};
+		const open = () => {
+			overlay.classList.add("is-open");
+			document.body.style.overflow = "hidden";
+		};
+
+		closeBtn?.addEventListener("click", close);
+		overlay.addEventListener("click", (event) => {
+			if (event.target === overlay) close();
+		});
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && overlay.classList.contains("is-open")) close();
+		});
+
+		qsa("a").forEach((link) => {
+			const text = String(link.textContent || "").trim().toLowerCase();
+			if (text === "faq") {
+				link.setAttribute("href", "#");
+				link.setAttribute("data-faq-trigger", "1");
+			}
+		});
+
+		document.addEventListener("click", (event) => {
+			const trigger = event.target instanceof Element
+				? event.target.closest("a[data-faq-trigger]")
+				: null;
+			if (!trigger) return;
+			event.preventDefault();
+			open();
+		});
+	}
+
+	function setupTermsPopup() {
+		if (qs("#g4y-terms-modal")) return;
+
+		const overlay = document.createElement("div");
+		overlay.className = "g4y-policy-overlay";
+		overlay.id = "g4y-terms-modal";
+		overlay.innerHTML = `
+			<div class="g4y-policy-modal" role="dialog" aria-modal="true" aria-label="Terms and Conditions">
+				<div class="g4y-policy-head">
+					<h3 class="g4y-policy-title">Terms and Conditions</h3>
+					<button type="button" class="g4y-policy-close" aria-label="Close">&times;</button>
+				</div>
+				<div class="g4y-policy-body">
+					<p><strong>Effective Date:</strong> 17th December 2025</p>
+					<p>Welcome to Asian3Dframes. By accessing or using our website www.asian3dframes.com, you agree to comply with and be bound by these Terms and Conditions. Please read them carefully before using our services.</p>
+
+					<h4>1. General</h4>
+					<p>These Terms govern your use of our website and services. By placing an order, you agree to these Terms. We reserve the right to update or modify these Terms at any time without prior notice.</p>
+
+					<h4>2. Products and Services</h4>
+					<p>We offer decorative and customized photo frames. Product images are for representation and slight variations may occur. Customized products are made based on customer inputs.</p>
+
+					<h4>3. Orders and Acceptance</h4>
+					<p>All orders are subject to availability and confirmation. We reserve the right to cancel any order due to pricing errors, stock issues, or suspicious activity. Once an order is placed, it cannot be modified or canceled after processing.</p>
+
+					<h4>4. Pricing and Payments</h4>
+					<p>All prices are listed in INR unless stated otherwise. We accept payments via secure payment gateways such as UPI and debit or credit cards. We are not responsible for payment failures due to technical issues.</p>
+
+					<h4>5. Shipping and Delivery</h4>
+					<p>Orders are processed and delivered as per our Shipping Policy. Delivery timelines are estimates and may vary. We are not liable for delays caused by third-party logistics.</p>
+
+					<h4>6. Returns and Refunds</h4>
+					<p>All sales are final with no returns or exchanges. Refunds are applicable only under specific conditions as mentioned in our Refund Policy.</p>
+
+					<h4>7. User Responsibilities</h4>
+					<p>You must provide accurate and complete information while placing orders, ensure correct shipping address and contact details, and avoid misuse of the website or fraudulent activity.</p>
+
+					<h4>8. Intellectual Property</h4>
+					<p>All content on this website, including images, designs, and text, is the property of Asian3Dframes. Unauthorized use, reproduction, or copying is strictly prohibited.</p>
+
+					<h4>9. Limitation of Liability</h4>
+					<p>We are not liable for any indirect, incidental, or consequential damages. Once the product is shipped, responsibility transfers to the courier partner.</p>
+
+					<h4>10. Privacy</h4>
+					<p>Your personal information is handled as per our Privacy Policy. We do not share your data with unauthorized third parties.</p>
+
+					<h4>11. Governing Law</h4>
+					<p>These Terms are governed by the laws of India. Any disputes shall be subject to the jurisdiction of local courts.</p>
+
+					<h4>12. Contact Us</h4>
+					<p>For any queries regarding these Terms:</p>
+					<p>Email: asian3dframes@gmail.com</p>
+					<p>WhatsApp support is available.</p>
+					<p>Website: www.asian3dframes.com</p>
+				</div>
+			</div>
+		`;
+		document.body.appendChild(overlay);
+
+		const closeBtn = qs(".g4y-policy-close", overlay);
+		const close = () => {
+			overlay.classList.remove("is-open");
+			document.body.style.overflow = "";
+		};
+		const open = () => {
+			overlay.classList.add("is-open");
+			document.body.style.overflow = "hidden";
+		};
+
+		closeBtn?.addEventListener("click", close);
+		overlay.addEventListener("click", (event) => {
+			if (event.target === overlay) close();
+		});
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape" && overlay.classList.contains("is-open")) close();
+		});
+
+		qsa("a").forEach((link) => {
+			const text = String(link.textContent || "").trim().toLowerCase();
+			if (text === "terms of service" || text === "terms & conditions" || text === "terms and conditions") {
+				link.setAttribute("href", "#");
+				link.setAttribute("data-terms-trigger", "1");
+			}
+		});
+
+		document.addEventListener("click", (event) => {
+			const trigger = event.target instanceof Element
+				? event.target.closest("a[data-terms-trigger]")
+				: null;
+			if (!trigger) return;
+			event.preventDefault();
+			open();
+		});
+	}
+
 	function setupDailyVisitorTracking() {
 		if (window.location.pathname.includes("/admin/")) return;
 
@@ -1766,6 +2191,10 @@
 		setupAdminAddProductForm();
 		setupProductMediaSlider();
 		setupAnimatedTestimonials();
+		setupShippingPolicyPopup();
+		setupRefundPolicyPopup();
+		setupFaqPopup();
+		setupTermsPopup();
 		setupDailyVisitorTracking();
 		setupProductMockupStudio();
 		updateCartBadges();
