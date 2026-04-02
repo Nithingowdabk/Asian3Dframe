@@ -74,7 +74,7 @@
     { href: 'albums.html', icon: 'fa-folder-open', text: 'Manage Albums' },
     { href: 'categories.html', icon: 'fa-tags', text: 'Manage Categories' },
     { href: 'manage-prices.html', icon: 'fa-dollar-sign', text: 'Frame Prices' },
-    { href: 'dashboard.html?view=admins', icon: 'fa-user-shield', text: 'Manage Admins' },
+    { href: 'dashboard.html?view=admins', icon: 'fa-user-shield', text: 'Manage Admins', id: 'showAdminManage' },
     { href: '../index.html', icon: 'fa-external-link-alt', text: 'View Site', target: '_blank' },
   ];
 
@@ -111,6 +111,27 @@
     return file || 'dashboard.html';
   }
 
+  function ensureSidebar() {
+    let sidebar = document.querySelector('.sidebar');
+    if (sidebar) {
+      if (!sidebar.id) sidebar.id = 'sidebar';
+      return sidebar;
+    }
+
+    const created = document.createElement('aside');
+    created.className = 'sidebar';
+    created.id = 'sidebar';
+
+    const main = document.querySelector('.main, main.main, .container');
+    if (main && main.parentNode) {
+      main.parentNode.insertBefore(created, main);
+    } else {
+      document.body.insertBefore(created, document.body.firstChild);
+    }
+
+    return created;
+  }
+
   function normalizeLinks(sidebar) {
     const nav = findOrCreateNav(sidebar);
     const page = currentPageName();
@@ -124,7 +145,8 @@
       nav.innerHTML = requiredLinks.map((link) => {
         const isActive = (link.href === page) || (link.href.startsWith('dashboard.html?view=admins') && page === 'dashboard.html' && location.search.includes('view=admins'));
         const targetAttr = link.target ? ` target="${link.target}"` : '';
-        return `<li class="nav-item"><a href="${link.href}"${targetAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a></li>`;
+        const idAttr = link.id ? ` id="${link.id}"` : '';
+        return `<li class="nav-item"><a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a></li>`;
       }).join('');
       return;
     }
@@ -132,7 +154,8 @@
     nav.innerHTML = requiredLinks.map((link) => {
       const isActive = (link.href === page) || (link.href.startsWith('dashboard.html?view=admins') && page === 'dashboard.html' && location.search.includes('view=admins'));
       const targetAttr = link.target ? ` target="${link.target}"` : '';
-      return `<a href="${link.href}"${targetAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a>`;
+      const idAttr = link.id ? ` id="${link.id}"` : '';
+      return `<a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a>`;
     }).join('');
   }
 
@@ -147,13 +170,14 @@
   }
 
   function run() {
-    const sidebar = document.querySelector('.sidebar');
-    if (!sidebar) return;
+    const sidebar = ensureSidebar();
 
     ensureCss();
     normalizeLogo(sidebar);
     normalizeLinks(sidebar);
     normalizeFooter(sidebar);
+
+    document.dispatchEvent(new CustomEvent('adminSidebarReady'));
   }
 
   if (document.readyState === 'loading') {

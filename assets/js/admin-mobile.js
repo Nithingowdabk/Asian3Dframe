@@ -1,7 +1,11 @@
 (function () {
+  var initialized = false;
+
   function setupMobileSidebar() {
+    if (initialized) return;
     var sidebar = document.querySelector('.sidebar');
     if (!sidebar) return;
+    initialized = true;
 
     var existingBtn = document.querySelector('.admin-mobile-menu-btn');
     if (!existingBtn) {
@@ -46,4 +50,6 @@
   } else {
     setupMobileSidebar();
   }
+
+  document.addEventListener('adminSidebarReady', setupMobileSidebar);
 })();
