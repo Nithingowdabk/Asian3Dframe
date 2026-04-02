@@ -68,8 +68,16 @@ if ($amountPaise < 100) {
     exit;
 }
 
-$keyId = trim((string) (getenv('rzp_live_SYVUaDMRcwcAWf') ?: ''));
-$keySecret = trim((string) (getenv('bBpZVmKNwgE5gDnv84EJPnRH') ?: ''));
+$readSecret = static function (string $name): string {
+    $value = getenv($name);
+    if ($value === false || $value === null || $value === '') {
+        $value = $_ENV[$name] ?? ($_SERVER[$name] ?? '');
+    }
+    return trim((string) $value);
+};
+
+$keyId = $readSecret('rzp_live_SYVUaDMRcwcAWf');
+$keySecret = $readSecret('bBpZVmKNwgE5gDnv84EJPnRH');
 if ($keyId === '' || $keySecret === '') {
     http_response_code(500);
     echo json_encode([
