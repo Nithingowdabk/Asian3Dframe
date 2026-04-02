@@ -66,21 +66,32 @@
     }
   `;
 
-  const requiredLinks = [
-    { href: 'dashboard.html', icon: 'fa-th-large', text: 'Dashboard' },
-    { href: 'orders.html', icon: 'fa-shopping-bag', text: 'Orders' },
-    { href: 'add-product.html', icon: 'fa-plus-circle', text: 'Add Product' },
-    { href: 'products.html', icon: 'fa-box', text: 'Manage Products' },
-    { href: 'albums.html', icon: 'fa-folder-open', text: 'Manage Albums' },
-    { href: 'categories.html', icon: 'fa-tags', text: 'Manage Categories' },
-    { href: 'manage-prices.html', icon: 'fa-dollar-sign', text: 'Frame Prices' },
-    { href: 'dashboard.html?view=admins', icon: 'fa-user-shield', text: 'Manage Admins', id: 'showAdminManage' },
-    { href: '../index.html', icon: 'fa-external-link-alt', text: 'View Site', target: '_blank' },
+  const linkGroups = [
+    {
+      title: 'Main',
+      links: [
+        { href: 'dashboard.html', icon: 'fa-th-large', text: 'Dashboard' },
+        { href: 'orders.html', icon: 'fa-shopping-bag', text: 'Orders' },
+      ],
+    },
+    {
+      title: 'Products',
+      links: [
+        { href: 'add-product.html', icon: 'fa-plus-circle', text: 'Add Product' },
+        { href: 'products.html', icon: 'fa-box', text: 'Manage Products' },
+        { href: 'albums.html', icon: 'fa-folder-open', text: 'Manage Albums' },
+        { href: 'categories.html', icon: 'fa-tags', text: 'Manage Categories' },
+        { href: 'manage-prices.html', icon: 'fa-dollar-sign', text: 'Frame Prices' },
+      ],
+    },
+    {
+      title: 'Site',
+      links: [
+        { href: 'dashboard.html?view=admins', icon: 'fa-user-shield', text: 'Manage Admins', id: 'showAdminManage' },
+        { href: '../index.html', icon: 'fa-external-link-alt', text: 'View Site', target: '_blank' },
+      ],
+    },
   ];
-
-  function isSidebarListContainer(node) {
-    return node && (node.classList.contains('nav') || node.classList.contains('sidebar-nav'));
-  }
 
   function ensureCss() {
     if (document.getElementById('adminSidebarUnifyStyle')) return;
@@ -88,22 +99,6 @@
     style.id = 'adminSidebarUnifyStyle';
     style.textContent = unifiedCss;
     document.head.appendChild(style);
-  }
-
-  function normalizeLogo(sidebar) {
-    const logo = sidebar.querySelector('.sidebar-logo, .logo');
-    if (!logo) return;
-    logo.innerHTML = '🎁 Asian<span>3D Frames</span>';
-  }
-
-  function findOrCreateNav(sidebar) {
-    let nav = sidebar.querySelector('.sidebar-nav, .nav');
-    if (isSidebarListContainer(nav)) return nav;
-
-    nav = document.createElement('nav');
-    nav.className = 'nav';
-    sidebar.appendChild(nav);
-    return nav;
   }
 
   function currentPageName() {
@@ -132,50 +127,33 @@
     return created;
   }
 
-  function normalizeLinks(sidebar) {
-    const nav = findOrCreateNav(sidebar);
+  function buildSidebar(sidebar) {
     const page = currentPageName();
 
-    // Remove section title blocks so all pages have same compact nav.
-    nav.querySelectorAll('.nav-section-title').forEach((el) => el.remove());
-
-    const usesLiPattern = !!nav.querySelector('.nav-item');
-
-    if (usesLiPattern) {
-      nav.innerHTML = requiredLinks.map((link) => {
-        const isActive = (link.href === page) || (link.href.startsWith('dashboard.html?view=admins') && page === 'dashboard.html' && location.search.includes('view=admins'));
+    const navHtml = linkGroups.map((group) => {
+      const linksHtml = group.links.map((link) => {
+        const isAdminsView = link.href.startsWith('dashboard.html?view=admins') && page === 'dashboard.html' && location.search.includes('view=admins');
+        const isActive = (link.href === page) || isAdminsView;
         const targetAttr = link.target ? ` target="${link.target}"` : '';
         const idAttr = link.id ? ` id="${link.id}"` : '';
         return `<li class="nav-item"><a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a></li>`;
       }).join('');
-      return;
-    }
 
-    nav.innerHTML = requiredLinks.map((link) => {
-      const isActive = (link.href === page) || (link.href.startsWith('dashboard.html?view=admins') && page === 'dashboard.html' && location.search.includes('view=admins'));
-      const targetAttr = link.target ? ` target="${link.target}"` : '';
-      const idAttr = link.id ? ` id="${link.id}"` : '';
-      return `<a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a>`;
+      return `<div class="nav-section-title">${group.title}</div>${linksHtml}`;
     }).join('');
-  }
 
-  function normalizeFooter(sidebar) {
-    let footer = sidebar.querySelector('.sidebar-footer');
-    if (!footer) {
-      footer = document.createElement('div');
-      footer.className = 'sidebar-footer';
-      sidebar.appendChild(footer);
-    }
-    footer.textContent = 'Asian3DFrames Admin © 2026';
+    sidebar.innerHTML = `
+      <div class="sidebar-logo">🎁 Asian<span>3D Frames</span></div>
+      <nav class="sidebar-nav">${navHtml}</nav>
+      <div class="sidebar-footer">Asian3DFrames Admin © 2026</div>
+    `;
   }
 
   function run() {
     const sidebar = ensureSidebar();
 
     ensureCss();
-    normalizeLogo(sidebar);
-    normalizeLinks(sidebar);
-    normalizeFooter(sidebar);
+    buildSidebar(sidebar);
 
     document.dispatchEvent(new CustomEvent('adminSidebarReady'));
   }
