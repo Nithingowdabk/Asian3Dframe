@@ -15,15 +15,22 @@
   var params = new URLSearchParams(window.location.search);
   var embedded = params.get('embedded') === '1';
 
+  function applyEmbeddedModeClass() {
+    document.documentElement.classList.add('admin-embedded');
+    if (document.body) {
+      document.body.classList.add('admin-embedded');
+    }
+  }
+
   if (!embedded && window.top === window.self) {
     var view = viewMap[file] || 'dashboard';
     window.location.replace('dashboard.html?view=' + encodeURIComponent(view));
     return;
   }
 
-  if (embedded) {
-    document.addEventListener('DOMContentLoaded', function () {
-      document.body.classList.add('admin-embedded');
-    });
+  if (embedded || window.top !== window.self) {
+    applyEmbeddedModeClass();
+    document.addEventListener('DOMContentLoaded', applyEmbeddedModeClass);
+    window.addEventListener('load', applyEmbeddedModeClass);
   }
 })();
