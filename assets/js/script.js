@@ -339,6 +339,9 @@
 				}
 				if (el.classList && el.classList.contains("cart-badge")) {
 					el.classList.toggle("visible", count > 0);
+					// Fallback in case page-level CSS or stale cache blocks class-based visibility.
+					el.style.opacity = count > 0 ? "1" : "0";
+					el.style.transform = count > 0 ? "scale(1)" : "scale(0)";
 				}
 			});
 		});
@@ -1766,7 +1769,20 @@
 		setupDailyVisitorTracking();
 		setupProductMockupStudio();
 		updateCartBadges();
+		// Re-sync in case other scripts mutate localStorage/DOM after init.
+		window.setTimeout(updateCartBadges, 0);
+		window.setTimeout(updateCartBadges, 300);
 	}
+
+	window.addEventListener("storage", (event) => {
+		if (!event || event.key === CART_KEY || event.key === null) {
+			updateCartBadges();
+		}
+	});
+
+	document.addEventListener("visibilitychange", () => {
+		if (!document.hidden) updateCartBadges();
+	});
 
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", init);
