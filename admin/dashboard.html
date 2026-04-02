@@ -289,10 +289,6 @@
       .sidebar.open{transform:translateX(0);}
       .main{margin-left:0;}
     }
-
-    .embedded-panel{display:none;height:calc(100vh - 150px);min-height:560px;}
-    .embedded-panel.active{display:block;}
-    .embedded-frame{width:100%;height:100%;border:0;background:#fff;border-radius:12px;box-shadow:var(--shadow-sm);}
   </style>
 </head>
 <body>
@@ -302,16 +298,15 @@
     <div class="sidebar-logo">🎁 Asian<span>3D Frames</span></div>
     <nav class="sidebar-nav">
       <div class="nav-section-title">Main</div>
-      <li class="nav-item"><a href="dashboard.html?view=dashboard" data-view="dashboard" class="active"><i class="fas fa-th-large"></i> Dashboard</a></li>
-      <li class="nav-item"><a href="dashboard.html?view=orders" data-view="orders"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+      <li class="nav-item"><a href="dashboard.html" class="active"><i class="fas fa-th-large"></i> Dashboard</a></li>
+      <li class="nav-item"><a href="orders.html"><i class="fas fa-shopping-bag"></i> Orders</a></li>
       <div class="nav-section-title">Products</div>
-      <li class="nav-item"><a href="dashboard.html?view=add" data-view="add"><i class="fas fa-plus-circle"></i> Add Product</a></li>
-      <li class="nav-item"><a href="dashboard.html?view=products" data-view="products"><i class="fas fa-box"></i> Manage Products</a></li>
-      <li class="nav-item"><a href="dashboard.html?view=albums" data-view="albums"><i class="fas fa-folder-open"></i> Manage Albums</a></li>
-      <li class="nav-item"><a href="dashboard.html?view=categories" data-view="categories"><i class="fas fa-tags"></i> Manage Categories</a></li>
-      <li class="nav-item"><a href="dashboard.html?view=manageprices" data-view="manageprices"><i class="fas fa-dollar-sign"></i> Frame Prices</a></li>
+      <li class="nav-item"><a href="add-product.html"><i class="fas fa-plus-circle"></i> Add Product</a></li>
+      <li class="nav-item"><a href="products.html"><i class="fas fa-box"></i> Manage Products</a></li>
+      <li class="nav-item"><a href="albums.html"><i class="fas fa-folder-open"></i> Manage Albums</a></li>
+      <li class="nav-item"><a href="categories.html"><i class="fas fa-tags"></i> Manage Categories</a></li>
       <div class="nav-section-title">Site</div>
-      <li class="nav-item"><a href="dashboard.html?view=admins" data-view="admins"><i class="fas fa-user-shield"></i> Manage Admins</a></li>
+      <li class="nav-item"><a href="#" id="showAdminManage"><i class="fas fa-user-shield"></i> Manage Admins</a></li>
       <li class="nav-item"><a href="../index.html" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a></li>
     </nav>
     <div class="sidebar-footer">Asian3DFrames Admin &copy; 2026</div>
@@ -322,9 +317,9 @@
 
     <!-- Topbar -->
     <div class="topbar">
-      <h1 class="topbar-title" id="topbarTitle">Dashboard</h1>
+      <h1 class="topbar-title">Dashboard</h1>
       <div class="topbar-actions">
-        <a href="dashboard.html?view=add" data-view="add" class="topbar-btn primary"><i class="fas fa-plus"></i> Add Product</a>
+        <a href="add-product.html" class="topbar-btn primary"><i class="fas fa-plus"></i> Add Product</a>
         <div class="admin-avatar">A</div>
       </div>
     </div>
@@ -333,7 +328,7 @@
     <div class="content">
 
       <!-- Stats -->
-      <div class="stats-grid dashboard-default" id="statsGrid">
+      <div class="stats-grid" id="statsGrid">
 
 
         <!-- Admin Management Section (Embedded) -->
@@ -378,6 +373,19 @@
           </div>
         </section>
           <script src="../assets/js/admin-manage.js"></script>
+          <script>
+            // Show/hide admin management section
+            document.addEventListener('DOMContentLoaded', function() {
+              const adminSection = document.getElementById('adminManageSection');
+              const showAdminBtn = document.getElementById('showAdminManage');
+              showAdminBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                // Hide all other content except admin section
+                document.querySelectorAll('.stats-grid, .chart-row, .recent-row, .tabs-header, .tab-content').forEach(el => el.style.display = 'none');
+                adminSection.style.display = 'block';
+              });
+            });
+          </script>
         <div class="stat-card">
           <div class="stat-icon gold"><i class="fas fa-shopping-bag"></i></div>
           <div class="stat-body">
@@ -413,7 +421,7 @@
       </div>
 
       <!-- Charts row -->
-      <div class="chart-row dashboard-default">
+      <div class="chart-row">
         <!-- Revenue by category -->
         <div class="card">
           <div class="card-header">
@@ -440,11 +448,11 @@
       </div>
 
       <!-- Recent orders -->
-      <div class="recent-row dashboard-default">
+      <div class="recent-row">
         <div class="card">
           <div class="card-header">
             <span class="card-title">Recent Orders</span>
-            <a href="dashboard.html?view=orders" data-view="orders" class="card-action">View All <i class="fas fa-arrow-right"></i></a>
+            <a href="orders.html" class="card-action">View All <i class="fas fa-arrow-right"></i></a>
           </div>
           <div class="table-wrap">
             <table>
@@ -463,7 +471,7 @@
       </div>
 
       <!-- Frame Prices Section (Tab) -->
-      <div class="dashboard-default" style="margin-top:40px;">
+      <div style="margin-top:40px;">
         <div class="tabs-header">
           <button class="tab-btn active" data-tab="overview">Overview</button>
           <button class="tab-btn" data-tab="frame-prices">Frame Prices</button>
@@ -513,10 +521,6 @@
         </div>
       </div>
 
-      <section id="embeddedPanel" class="embedded-panel">
-        <iframe id="embeddedFrame" class="embedded-frame" src="about:blank" title="Admin Module"></iframe>
-      </section>
-
     </div>
   </div>
 
@@ -530,72 +534,7 @@
     }
 
     function payLabel(p) {
-      return { cod:'Cash on Delivery', razorpay:'Online Payment' }[p] || p;
-    }
-
-    const embeddedRoutes = {
-      orders: '../assets/admin-modules/orders.html?embedded=1',
-      add: '../assets/admin-modules/add-product.html?embedded=1',
-      products: '../assets/admin-modules/products.html?embedded=1',
-      albums: '../assets/admin-modules/albums.html?embedded=1',
-      categories: '../assets/admin-modules/categories.html?embedded=1',
-      manageprices: '../assets/admin-modules/manage-prices.html?embedded=1',
-      admins: '../assets/admin-modules/admin-manage.html?embedded=1',
-    };
-
-    const viewTitles = {
-      dashboard: 'Dashboard',
-      orders: 'Orders',
-      add: 'Add Product',
-      products: 'Manage Products',
-      albums: 'Manage Albums',
-      categories: 'Manage Categories',
-      manageprices: 'Frame Prices',
-      admins: 'Manage Admins',
-    };
-
-    function setActiveSidebarLink(view) {
-      document.querySelectorAll('.sidebar-nav a[data-view]').forEach((a) => {
-        a.classList.toggle('active', a.dataset.view === view);
-      });
-    }
-
-    function switchAdminView(view) {
-      const safeView = viewTitles[view] ? view : 'dashboard';
-      const defaults = document.querySelectorAll('.dashboard-default');
-      const panel = document.getElementById('embeddedPanel');
-      const frame = document.getElementById('embeddedFrame');
-      const topTitle = document.getElementById('topbarTitle');
-
-      if (safeView === 'dashboard') {
-        defaults.forEach((el) => { el.style.display = ''; });
-        panel.classList.remove('active');
-      } else {
-        defaults.forEach((el) => { el.style.display = 'none'; });
-        panel.classList.add('active');
-        if (frame.dataset.current !== safeView) {
-          frame.src = embeddedRoutes[safeView];
-          frame.dataset.current = safeView;
-        }
-      }
-
-      if (topTitle) topTitle.textContent = viewTitles[safeView] || 'Admin';
-      setActiveSidebarLink(safeView);
-
-      const newUrl = safeView === 'dashboard' ? 'dashboard.html' : `dashboard.html?view=${encodeURIComponent(safeView)}`;
-      window.history.replaceState({}, '', newUrl);
-    }
-
-    function initTwoPageAdminNavigation() {
-      document.querySelectorAll('a[data-view]').forEach((a) => {
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          switchAdminView(a.dataset.view || 'dashboard');
-        });
-      });
-
-      const params = new URLSearchParams(window.location.search);
-      switchAdminView(params.get('view') || 'dashboard');
+      return { cod:'Cash', vodafone_cash:'Vodafone', instapay:'InstaPay' }[p] || p;
     }
 
     // ── TAB SWITCHING ──
@@ -722,7 +661,7 @@
             <td><strong>${fmt(o.total)}</strong></td>
             <td>${statusBadge(o.status)}</td>
             <td style="font-size:.8rem;color:var(--mid);">${new Date(o.created_at).toLocaleDateString('en-GB')}</td>
-            <td><a href="dashboard.html?view=orders" data-view="orders" style="color:var(--gold-dark);font-size:.82rem;font-weight:600;">View</a></td>
+            <td><a href="orders.html" style="color:var(--gold-dark);font-size:.82rem;font-weight:600;">View</a></td>
           </tr>`).join('')
         : '<tr><td colspan="8" style="text-align:center;color:var(--mid);padding:28px;">No orders yet.</td></tr>';
 
@@ -858,7 +797,6 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadDashboard();
       loadGlobalPrices();
-      initTwoPageAdminNavigation();
     });
   </script>
 </body>
