@@ -319,7 +319,12 @@
 	}
 
 	function cartCount() {
-		return getCart().reduce((sum, item) => sum + item.quantity, 0);
+		const raw = parseJSON(localStorage.getItem(CART_KEY), []);
+		if (!Array.isArray(raw)) return 0;
+		return raw.reduce((sum, item) => {
+			const qty = Number(item?.quantity ?? item?.qty ?? 0);
+			return sum + (Number.isFinite(qty) && qty > 0 ? qty : 0);
+		}, 0);
 	}
 
 	function updateCartBadges() {
