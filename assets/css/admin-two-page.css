@@ -1,0 +1,33 @@
+/* Embedded mode for single admin-page workflow */
+body.admin-embedded {
+  display: block !important;
+  background: #f0ece8;
+}
+
+body.admin-embedded .sidebar {
+  display: none !important;
+}
+
+body.admin-embedded .main,
+body.admin-embedded main.main {
+  margin-left: 0 !important;
+  width: 100% !important;
+  min-height: auto !important;
+}
+
+body.admin-embedded .topbar,
+body.admin-embedded .top {
+  position: static !important;
+  top: auto !important;
+}
+
+body.admin-embedded .content,
+body.admin-embedded main.main,
+body.admin-embedded .container {
+  padding: 14px !important;
+}
+
+body.admin-embedded .admin-mobile-menu-btn,
+body.admin-embedded .admin-mobile-backdrop {
+  display: none !important;
+}
