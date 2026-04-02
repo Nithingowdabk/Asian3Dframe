@@ -84,7 +84,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-$allowedPayments = ['cod', 'vodafone_cash', 'instapay'];
+$allowedPayments = ['cod', 'razorpay'];
 if (!in_array($paymentMethod, $allowedPayments, true)) {
     echo json_encode(['success' => false, 'message' => 'Invalid payment method.']);
     exit;

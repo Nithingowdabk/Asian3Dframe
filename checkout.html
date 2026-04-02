@@ -721,6 +721,15 @@
         return;
       }
 
+      async function readJsonResponse(res) {
+        const raw = await res.text();
+        try {
+          return { data: JSON.parse(raw), raw };
+        } catch (_) {
+          return { data: null, raw };
+        }
+      }
+
       const pincodeInput = document.getElementById('pincode');
       if (pincodeInput) {
         pincodeInput.addEventListener('input', function() {
@@ -841,7 +850,10 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
           });
-          const data = await res.json();
+          const { data, raw } = await readJsonResponse(res);
+          if (!data) {
+            throw new Error('Server returned invalid JSON from place_order.php. ' + (raw ? raw.slice(0, 120) : ''));
+          }
           if (!res.ok || !data.success) {
             throw new Error(data.message || 'Failed to place order.');
           }
@@ -889,7 +901,10 @@
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(payload),
             });
-            const data = await res.json();
+            const { data, raw } = await readJsonResponse(res);
+            if (!data) {
+              throw new Error('Server returned invalid JSON from razorpay_order.php. ' + (raw ? raw.slice(0, 120) : ''));
+            }
             if (!res.ok || !data.success || !data.razorpay_order_id) {
               throw new Error(data.message || 'Failed to initialize online payment.');
             }
