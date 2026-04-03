@@ -86,6 +86,45 @@
     transition: filter 0.2s;
   }
 
+  /* Defensive cleanup for mixed per-page sidebar CSS */
+  .sidebar .sidebar-nav,
+  .sidebar .sidebar-nav ul,
+  .sidebar .sidebar-nav ol {
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  .sidebar .sidebar-nav li,
+  .sidebar .sidebar-nav .nav-item,
+  .sidebar .sidebar-nav > div {
+    display: block !important;
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .sidebar .sidebar-nav li::before,
+  .sidebar .sidebar-nav li::marker,
+  .sidebar .sidebar-nav .nav-item::before,
+  .sidebar .sidebar-nav .nav-item::marker,
+  .sidebar .sidebar-nav a::before,
+  .sidebar .sidebar-nav a::marker {
+    content: none !important;
+    display: none !important;
+  }
+
+  .sidebar .sidebar-nav a {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
   .card,
   .table-card,
   .modal-card,
