@@ -359,10 +359,16 @@
             // Show/hide admin management section (auto-show if ?view=admins)
             document.addEventListener('DOMContentLoaded', function() {
               const adminSection = document.getElementById('adminManageSection');
+              const statsGrid = document.getElementById('statsGrid');
               const showAdminBtn = document.getElementById('showAdminManage');
               function showAdminsOnly() {
-                // Hide all other dashboard content
-                document.querySelectorAll('.stats-grid, .chart-row, .recent-row, .tabs-header, .tab-content').forEach(el => el.style.display = 'none');
+                // Keep stats grid visible because admin section is inside it.
+                if (statsGrid) {
+                  statsGrid.style.display = 'grid';
+                  statsGrid.querySelectorAll('.stat-card').forEach(el => el.style.display = 'none');
+                }
+                // Hide non-admin dashboard sections.
+                document.querySelectorAll('.chart-row, .recent-row, .tabs-header, .tab-content').forEach(el => el.style.display = 'none');
                 adminSection.style.display = 'block';
               }
               if (window.location.search.includes('view=admins')) {
