@@ -32,12 +32,23 @@
     .sidebar .nav,
     .sidebar .sidebar-nav {
       padding: 20px 0 !important;
+      display: block !important;
+      text-align: left !important;
+    }
+
+    .sidebar .nav-section-title {
+      display: block !important;
+      text-align: left !important;
+      padding: 14px 24px 8px !important;
+      margin: 0 !important;
+      line-height: 1.2 !important;
     }
 
     .sidebar .nav a,
     .sidebar .nav-item a {
       display: flex !important;
       align-items: center !important;
+      justify-content: flex-start !important;
       gap: 12px !important;
       padding: 12px 24px !important;
       font-size: .88rem !important;
@@ -82,6 +93,13 @@
 
     .sidebar .sidebar-nav *::marker {
       content: '' !important;
+    }
+
+    /* Keep Font Awesome icon pseudo elements, remove all other pseudo bullets */
+    .sidebar .sidebar-nav :not(i)::before,
+    .sidebar .sidebar-nav :not(i)::after {
+      content: none !important;
+      display: none !important;
     }
 
     .sidebar .sidebar-footer {
