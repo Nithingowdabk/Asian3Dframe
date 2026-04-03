@@ -9,6 +9,24 @@
   <style>
     body { font-family: 'Inter', sans-serif; background: #f0ece8; color: #1a1510; margin: 0; }
     .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,.10); padding: 32px; }
+
+    @media (max-width: 700px) {
+      .container {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 0 24px 0 !important;
+        box-shadow: none !important;
+      }
+      .table-wrap {
+        margin: 0 !important;
+        padding: 0 0 0 0 !important;
+        overflow-x: auto !important;
+        width: 100vw !important;
+        min-width: 0 !important;
+      }
+    }
     h1 { font-size: 2rem; margin-bottom: 24px; }
     .table-wrap { overflow-x: auto; margin-top: 14px; }
     .admin-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
