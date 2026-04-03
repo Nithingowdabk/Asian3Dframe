@@ -40,7 +40,7 @@
     .category-img{width:54px;height:54px;border-radius:8px;object-fit:cover;border:1.5px solid #eee;box-shadow:0 1px 4px rgba(0,0,0,.07);}
     .category-name{flex:1;font-size:1.13rem;font-weight:600;padding:7px 12px;border-radius:7px;border:1px solid #eee;background:#faf7f4;transition:border-color .2s;}
     .category-name:focus{border-color:var(--gold);outline:none;}
-    .category-actions{display:flex;gap:4px;margin-left:4px;}
+    .category-actions{display:flex;gap:10px;}
     .category-edit{background:#10b981;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:.92rem;box-shadow:0 1px 4px rgba(16,185,129,.08);transition:background .2s;}
     .category-edit:hover{background:#059669;}
     .category-delete{background:#ef4444;color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:.92rem;box-shadow:0 1px 4px rgba(239,68,68,.08);transition:background .2s;}
@@ -68,40 +68,7 @@
       .category-name{font-size:.98rem;padding:7px 9px;width:100%;}
       .category-actions{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
       .category-actions .category-save{grid-column:1 / -1 !important;margin-right:0 !important;}
-      .category-edit,.category-delete,.category-actions .category-save{padding:6px 10px;font-size:.84rem;width:auto;min-width: 0;}
-      .category-edit,.category-delete{
-        padding:6px 10px !important;
-        font-size:.92rem !important;
-        min-width: 0 !important;
-        border-radius: 999px !important;
-        font-weight: bold !important;
-        box-shadow: none !important;
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-      }
-      .category-edit {
-        background: #fff !important;
-        color: #111 !important;
-        border: 2px solid #ddd !important;
-        box-shadow: none !important;
-        transition: background .18s, color .18s, border .18s;
-        margin-right: 2px !important;
-      }
-      .category-edit:hover {
-        background: #f8f8f8 !important;
-        border-color: #bbb !important;
-      }
-      .category-delete {
-        background: #ef4444 !important;
-        color: #fff !important;
-        border: none !important;
-        box-shadow: none !important;
-        transition: background .18s;
-        margin-left: 2px !important;
-      }
-      .category-delete:hover {
-        background: #b91c1c !important;
-      }
+      .category-edit,.category-delete,.category-actions .category-save{padding:8px 10px;font-size:.84rem;width:100%;}
       .empty{padding:18px 10px;font-size:.95rem;}
     }
 
