@@ -30,6 +30,7 @@
     .modal-actions { margin-top: 18px; text-align: right; }
     .alert { margin-bottom: 18px; color: #ef4444; font-weight: 600; }
 
+    /* --- MOBILE FRIENDLY PATCH --- */
     @media (max-width: 700px) {
       .container { margin: 12px; padding: 14px; }
       h1 { font-size: 1.3rem; margin-bottom: 14px; }
@@ -44,6 +45,9 @@
       .modal-content { width: calc(100vw - 24px); min-width: 0; padding: 16px; border-radius: 10px; }
       .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: initial; }
       .modal-actions .btn { width: 100%; }
+      .form-row { margin-bottom: 12px; }
+      .form-row label { font-size: .98rem; }
+      .form-row input { font-size: .95rem; padding: 9px; }
     }
 
     @media (max-width: 420px) {
@@ -51,6 +55,7 @@
       h1 { font-size: 1.12rem; }
       .table-wrap { margin-top: 10px; }
       .admin-table th, .admin-table td { padding: 8px 8px; font-size: .78rem; }
+      .modal-content { padding: 8px; }
     }
   </style>
 </head>

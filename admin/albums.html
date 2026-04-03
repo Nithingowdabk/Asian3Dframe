@@ -59,14 +59,34 @@
     .notice{display:none;margin:14px 24px 0;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,.08);}
     .notice.error{background:#fee2e2;border-color:#fecaca;color:#991b1b;}
     .notice.success{background:#dcfce7;border-color:#bbf7d0;color:#166534;}
+
+    /* --- MOBILE FRIENDLY PATCH --- */
     @media (max-width: 1000px) {
       .main{margin-left:0;padding:18px 6vw;}
       .card{max-width:100vw;}
     }
     @media (max-width: 700px) {
-      .form{grid-template-columns:1fr;}
-      .form .btn.primary{width:100%;justify-self:stretch;}
-      .album-actions{flex-wrap:wrap;}
+      .main{padding:8px 2vw;}
+      .card{padding:12px 0 8px;}
+      .top{margin-bottom:14px;}
+      .title{font-size:1.45rem;}
+      .toolbar{padding:12px 12px 10px;font-size:1rem;}
+      .form{padding:0 10px;flex-direction:column;align-items:stretch;gap:10px;display:flex;}
+      .form .btn.primary{width:100%;}
+      .album-list{gap:12px;margin-top:14px;padding:0 10px;}
+      .album-item{padding:10px;gap:10px;display:grid;grid-template-columns:52px 1fr;align-items:center;}
+      .album-cover{width:52px;height:52px;grid-row:1 / span 2;}
+      .album-name{font-size:.98rem;padding:7px 9px;width:100%;}
+      .album-actions{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .album-view,.album-delete{padding:8px 10px;font-size:.84rem;width:100%;}
+      .empty{padding:18px 10px;font-size:.95rem;}
+    }
+    @media (max-width: 420px) {
+      .main{padding:6px 2vw;}
+      .title{font-size:1.25rem;}
+      .album-item{grid-template-columns:44px 1fr;padding:8px;}
+      .album-cover{width:44px;height:44px;}
+      .album-name{font-size:.92rem;}
     }
   </style>
 </head>
