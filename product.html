@@ -104,14 +104,16 @@
       min-height: 92px;
     }
     .trust-card-icon {
-      width: 30px;
-      height: 30px;
+      width: 38px;
+      height: 38px;
       border-radius: 999px;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
       background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      font-size: .82rem;
+      font-size: 1.18rem;
+      margin: 0 auto 7px auto;
     }
     .trust-card-title {
       font-size: .82rem;
@@ -217,7 +219,7 @@
       .mockup-thumb { width: 42px; height: 56px; }
       .info-card { padding: 18px; }
       .trust-badges { grid-template-columns: 1fr; gap: 8px; }
-      .trust-cards { grid-template-columns: 1fr; gap: 8px; }
+      .trust-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     }
     @media (max-width: 560px) {
       .pill-btn { flex: 1 1 calc(50% - 10px); text-align: center; }
@@ -358,23 +360,6 @@
             <div class="trust-badge"><i class="fas fa-shield-halved" aria-hidden="true"></i> Best Price Guarantee</div>
             <div class="trust-badge"><i class="fas fa-truck-fast" aria-hidden="true"></i> All India Delivery</div>
           </div>
-          <div class="trust-cards" aria-label="Extra product trust cards">
-            <article class="trust-card">
-              <span class="trust-card-icon"><i class="fas fa-gift" aria-hidden="true"></i></span>
-              <h3 class="trust-card-title">Perfect for Gifting</h3>
-              <p class="trust-card-sub">Elegant finish and ready-to-gift presentation.</p>
-            </article>
-            <article class="trust-card">
-              <span class="trust-card-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
-              <h3 class="trust-card-title">Best Price Guarantee</h3>
-              <p class="trust-card-sub">Premium quality at transparent, fair pricing.</p>
-            </article>
-            <article class="trust-card">
-              <span class="trust-card-icon"><i class="fas fa-truck-fast" aria-hidden="true"></i></span>
-              <h3 class="trust-card-title">All India Delivery</h3>
-              <p class="trust-card-sub">Fast and safe shipping across India.</p>
-            </article>
-          </div>
 
           <div class="option-block">
             <span class="option-title">Frame Type</span>
@@ -432,6 +417,24 @@
             <a href="products.html" class="btn btn-ghost">Back to Products</a>
           </div>
         </section>
+      </div>
+
+      <div class="trust-cards" aria-label="Extra product trust cards">
+        <article class="trust-card">
+          <span class="trust-card-icon"><i class="fas fa-gift" aria-hidden="true"></i></span>
+          <h3 class="trust-card-title">Perfect for Gifting</h3>
+          
+        </article>
+        <article class="trust-card">
+          <span class="trust-card-icon"><i class="fas fa-shield-halved" aria-hidden="true"></i></span>
+          <h3 class="trust-card-title">Best Price Guarantee</h3>
+          
+        </article>
+        <article class="trust-card">
+          <span class="trust-card-icon"><i class="fas fa-truck-fast" aria-hidden="true"></i></span>
+          <h3 class="trust-card-title">All India Delivery</h3>
+          
+        </article>
       </div>
 
       <section class="section featured-section" id="detailFeaturedSection" style="padding-top:36px;" hidden>
