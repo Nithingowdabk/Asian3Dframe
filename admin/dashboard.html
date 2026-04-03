@@ -276,6 +276,27 @@
     .prices-container{display:none;}
     .prices-container.active{display:block;}
 
+    /* Embedded admin management styles */
+    #adminManageSection .table-wrap{overflow-x:auto;margin-top:14px;}
+    #adminManageSection .admin-table{width:100%;border-collapse:collapse;margin-bottom:0;}
+    #adminManageSection .admin-table th,
+    #adminManageSection .admin-table td{padding:12px 16px;border-bottom:1px solid #eee;text-align:left;}
+    #adminManageSection .admin-table th{background:#faf7f4;font-size:.95rem;}
+    #adminManageSection .admin-table td{font-size:.97rem;}
+    #adminManageSection .actions button{margin-right:8px;}
+    #adminManageSection .btn{padding:8px 16px;border-radius:8px;border:none;font-weight:600;cursor:pointer;}
+    #adminManageSection .btn-add{background:linear-gradient(135deg,#c8956c,#a0704a);color:#fff;}
+    #adminManageSection .btn-edit{background:#3b82f6;color:#fff;}
+    #adminManageSection .btn-delete{background:#ef4444;color:#fff;}
+    #adminManageSection .form-row{margin-bottom:18px;}
+    #adminManageSection .form-row label{display:block;margin-bottom:6px;font-weight:600;}
+    #adminManageSection .form-row input{width:100%;padding:10px;border-radius:6px;border:1.5px solid #ccc;font-size:1rem;}
+    #adminManageSection .modal{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,.18);align-items:center;justify-content:center;z-index:1000;}
+    #adminManageSection .modal.active{display:flex;}
+    #adminManageSection .modal-content{background:#fff;padding:32px;border-radius:12px;min-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.18);}
+    #adminManageSection .modal-actions{margin-top:18px;text-align:right;}
+    #adminManageSection .alert{margin-bottom:18px;color:#ef4444;font-weight:600;display:none;}
+
     /* ── LOADING SPINNER ── */
     .loading{text-align:center;padding:40px;color:var(--mid);}
     .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(200,149,108,.2);
