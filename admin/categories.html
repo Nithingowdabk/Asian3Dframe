@@ -57,11 +57,28 @@
     @media (max-width: 600px) {
       .main{padding:8px 2vw;}
       .card{padding:12px 0 8px;}
-      .add-category-form{padding:0 8px;flex-direction:column;align-items:stretch;}
-      .category-item{padding:8px 6px;gap:8px;}
+      .top{margin-bottom:14px;}
+      .title{font-size:1.45rem;}
+      .toolbar{padding:12px 12px 10px;font-size:1rem;}
+      .add-category-form{padding:0 10px;flex-direction:column;align-items:stretch;gap:10px;}
+      .add-category-form button{width:100%;}
+      .category-list{gap:12px;margin-top:14px;padding:0 10px;}
+      .category-item{padding:10px;gap:10px;display:grid;grid-template-columns:52px 1fr;align-items:center;}
+      .category-img{width:52px;height:52px;grid-row:1 / span 2;}
+      .category-name{font-size:.98rem;padding:7px 9px;width:100%;}
+      .category-actions{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .category-actions .category-save{grid-column:1 / -1 !important;margin-right:0 !important;}
+      .category-edit,.category-delete,.category-actions .category-save{padding:8px 10px;font-size:.84rem;width:100%;}
+      .empty{padding:18px 10px;font-size:.95rem;}
+    }
+
+    @media (max-width: 420px) {
+      .main{padding:6px 2vw;}
+      .title{font-size:1.25rem;}
+      .category-item{grid-template-columns:44px 1fr;padding:8px;}
       .category-img{width:44px;height:44px;}
-      .category-name{font-size:1rem;padding:6px 8px;}
-      .category-edit,.category-delete{padding:6px 10px;font-size:.85rem;}
+      .category-name{font-size:.92rem;}
+      .category-actions{grid-template-columns:1fr;}
     }
   </style>
 </head>
