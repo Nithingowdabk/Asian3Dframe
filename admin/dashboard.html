@@ -356,16 +356,29 @@
         </section>
           <script src="../assets/js/admin-manage.js"></script>
           <script>
-            // Show/hide admin management section
+            // Show/hide admin management section (auto-show if ?view=admins)
             document.addEventListener('DOMContentLoaded', function() {
               const adminSection = document.getElementById('adminManageSection');
               const showAdminBtn = document.getElementById('showAdminManage');
-              showAdminBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // Hide all other content except admin section
+              function showAdminsOnly() {
+                // Hide all other dashboard content
                 document.querySelectorAll('.stats-grid, .chart-row, .recent-row, .tabs-header, .tab-content').forEach(el => el.style.display = 'none');
                 adminSection.style.display = 'block';
-              });
+              }
+              if (window.location.search.includes('view=admins')) {
+                showAdminsOnly();
+              }
+              if (showAdminBtn) {
+                showAdminBtn.addEventListener('click', function(e) {
+                  e.preventDefault();
+                  // Update URL to include ?view=admins for consistency
+                  if (!window.location.search.includes('view=admins')) {
+                    window.location.search = 'view=admins';
+                  } else {
+                    showAdminsOnly();
+                  }
+                });
+              }
             });
           </script>
         <div class="stat-card">
