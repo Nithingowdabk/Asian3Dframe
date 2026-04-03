@@ -297,6 +297,42 @@
     #adminManageSection .modal-actions{margin-top:18px;text-align:right;}
     #adminManageSection .alert{margin-bottom:18px;color:#ef4444;font-weight:600;display:none;}
 
+    @media (max-width: 700px) {
+      #adminManageSection .container {
+        margin: 0 !important;
+        padding: 0 0 24px 0 !important;
+        max-width: 100vw !important;
+        width: 100vw !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+      #adminManageSection .table-wrap {
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: auto !important;
+        width: 100vw !important;
+        min-width: 0 !important;
+      }
+      #adminManageSection h1 {
+        font-size: 1.3rem !important;
+        margin-bottom: 14px !important;
+      }
+      #adminManageSection .btn { padding: 9px 12px !important; font-size: .85rem !important; }
+      #adminManageSection .admin-table { min-width: 0 !important; width: 100% !important; margin-bottom: 16px !important; }
+      #adminManageSection .admin-table th, #adminManageSection .admin-table td { padding: 9px 10px !important; font-size: .82rem !important; vertical-align: top !important; }
+      #adminManageSection .admin-table th:nth-child(1), #adminManageSection .admin-table td:nth-child(1) { width: 46px !important; }
+      #adminManageSection .admin-table th:nth-child(3), #adminManageSection .admin-table td:nth-child(3) { min-width: 96px !important; }
+      #adminManageSection .admin-table th:nth-child(4), #adminManageSection .admin-table td:nth-child(4) { min-width: 108px !important; }
+      #adminManageSection .actions { flex-direction: column !important; align-items: stretch !important; gap: 6px !important; }
+      #adminManageSection .actions .btn { width: 100% !important; text-align: center !important; }
+      #adminManageSection .modal-content { width: calc(100vw - 24px) !important; min-width: 0 !important; padding: 16px !important; border-radius: 10px !important; }
+      #adminManageSection .modal-actions { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; text-align: initial !important; }
+      #adminManageSection .modal-actions .btn { width: 100% !important; }
+      #adminManageSection .form-row { margin-bottom: 12px !important; }
+      #adminManageSection .form-row label { font-size: .98rem !important; }
+      #adminManageSection .form-row input { font-size: .95rem !important; padding: 9px !important; }
+    }
+
     /* ── LOADING SPINNER ── */
     .loading{text-align:center;padding:40px;color:var(--mid);}
     .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(200,149,108,.2);
