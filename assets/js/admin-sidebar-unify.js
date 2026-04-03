@@ -146,6 +146,13 @@
       <nav class="sidebar-nav">${navHtml}</nav>
       <div class="sidebar-footer">Asian3DFrames Admin © 2026</div>
     `;
+
+    // Defensive cleanup for older cached templates.
+    sidebar.querySelectorAll('a[href*="manage-prices.html"], a[href*="manageprices"]').forEach((el) => {
+      const item = el.closest('.nav-item');
+      if (item) item.remove();
+      else el.remove();
+    });
   }
 
   function run() {
