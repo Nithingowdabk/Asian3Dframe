@@ -122,15 +122,12 @@
 
       <div class="card">
         <div class="card-header">
-          <span class="card-title"><i class="fas fa-tags"></i> Select Category</span>
+          <span class="card-title"><i class="fas fa-globe"></i> Global Frame Prices</span>
         </div>
         <div class="card-body">
-          <div class="form-group">
-            <label for="categorySelect">Choose a Category <span style="color:var(--red);">*</span></label>
-            <select id="categorySelect" onchange="loadCategoryPrices()">
-              <option value="">Loading categories…</option>
-            </select>
-          </div>
+          <p style="color:var(--mid);font-size:.92rem;line-height:1.6;">
+            Prices saved here apply to all categories and products.
+          </p>
         </div>
       </div>
 
@@ -168,39 +165,11 @@
     const normalSizes = ["A1", "A2", "A3", "A4", "2 FEET X 4 FEET", "4 FEET X 4 FEET", "4 FEET X 6 FEET", "4 FEET X 8 FEET", "CUSTOMISED SIZE"];
 
     document.addEventListener('DOMContentLoaded', async function() {
-      await loadCategories();
+      await loadGlobalPrices();
     });
 
-    async function loadCategories() {
-      try {
-        const response = await fetch('../php/get_categories.php');
-        const data = await response.json();
-        
-        const categorySelect = document.getElementById('categorySelect');
-        categorySelect.innerHTML = '<option value="">Select a category</option>';
-        
-        if (data.success && Array.isArray(data.categories)) {
-          data.categories.forEach(cat => {
-            const option = document.createElement('option');
-            option.value = cat.id;
-            option.textContent = cat.name;
-            categorySelect.appendChild(option);
-          });
-        }
-      } catch (error) {
-        console.error('Error loading categories:', error);
-        showAlert('Error loading categories', 'error');
-      }
-    }
-
-    async function loadCategoryPrices() {
-      const categorySelect = document.getElementById('categorySelect');
-      const categoryId = categorySelect.value;
-      
-      if (!categoryId) {
-        document.getElementById('pricesContainer').classList.remove('active');
-        return;
-      }
+    async function loadGlobalPrices() {
+      const categoryId = 0;
 
       try {
         const response = await fetch(`../php/get_category_prices.php?category_id=${categoryId}`);
@@ -271,13 +240,7 @@
     }
 
     async function savePrices() {
-      const categorySelect = document.getElementById('categorySelect');
-      const categoryId = categorySelect.value;
-      
-      if (!categoryId) {
-        showAlert('Please select a category', 'error');
-        return;
-      }
+      const categoryId = 0;
 
       const saveBtn = document.getElementById('saveBtn');
       saveBtn.disabled = true;
