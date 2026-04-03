@@ -58,6 +58,13 @@
       text-align: center;
     }
 
+    .sidebar .nav-item,
+    .sidebar .sidebar-nav .nav-item {
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     .sidebar .sidebar-footer {
       padding: 16px 24px !important;
       border-top: 1px solid rgba(255,255,255,.08) !important;
@@ -135,7 +142,7 @@
         const isActive = (link.href === page) || isAdminsView;
         const targetAttr = link.target ? ` target="${link.target}"` : '';
         const idAttr = link.id ? ` id="${link.id}"` : '';
-        return `<li class="nav-item"><a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a></li>`;
+        return `<div class="nav-item"><a href="${link.href}"${targetAttr}${idAttr}${isActive ? ' class="active"' : ''}><i class="fas ${link.icon}"></i> ${link.text}</a></div>`;
       }).join('');
 
       return `<div class="nav-section-title">${group.title}</div>${linksHtml}`;
