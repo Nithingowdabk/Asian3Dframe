@@ -14,7 +14,7 @@
     width: 280px !important;
     transform: translateX(-105%);
     transition: transform 0.28s ease;
-    z-index: 1200 !important;
+    z-index: 1300 !important;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
   }
@@ -73,12 +73,17 @@
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
-    z-index: 1150;
+    z-index: 1290;
   }
 
   body.admin-sidebar-open .admin-mobile-backdrop {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  body.admin-sidebar-open .main, body.admin-sidebar-open .content, body.admin-sidebar-open main.main {
+    filter: blur(2.5px) grayscale(0.12) brightness(0.98);
+    transition: filter 0.2s;
   }
 
   .card,
