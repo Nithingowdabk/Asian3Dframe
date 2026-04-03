@@ -41,6 +41,11 @@
       border-left: 3px solid transparent !important;
       text-decoration: none !important;
       transition: all .25s ease !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
     }
 
     .sidebar .nav a:hover,
@@ -60,9 +65,19 @@
 
     .sidebar .nav-item,
     .sidebar .sidebar-nav .nav-item {
+      display: block !important;
       list-style: none !important;
       margin: 0 !important;
       padding: 0 !important;
+    }
+
+    .sidebar .sidebar-nav,
+    .sidebar .sidebar-nav * {
+      list-style: none !important;
+    }
+
+    .sidebar .sidebar-nav *::marker {
+      content: '' !important;
     }
 
     .sidebar .sidebar-footer {
