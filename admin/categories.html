@@ -70,10 +70,33 @@
       .category-actions .category-save{grid-column:1 / -1 !important;margin-right:0 !important;}
       .category-edit,.category-delete,.category-actions .category-save{padding:8px 10px;font-size:.84rem;width:100%;}
       .category-edit,.category-delete{
-        padding:6px 7px !important;
-        font-size:.74rem !important;
+        padding:6px 16px !important;
+        font-size:.95rem !important;
         min-width: 0 !important;
-        border-radius: 6px !important;
+        border-radius: 999px !important;
+        font-weight: bold !important;
+        box-shadow: none !important;
+      }
+      .category-edit {
+        background: #fff !important;
+        color: #111 !important;
+        border: 2px solid #ddd !important;
+        box-shadow: none !important;
+        transition: background .18s, color .18s, border .18s;
+      }
+      .category-edit:hover {
+        background: #f8f8f8 !important;
+        border-color: #bbb !important;
+      }
+      .category-delete {
+        background: #ef4444 !important;
+        color: #fff !important;
+        border: none !important;
+        box-shadow: none !important;
+        transition: background .18s;
+      }
+      .category-delete:hover {
+        background: #b91c1c !important;
       }
       .empty{padding:18px 10px;font-size:.95rem;}
     }
