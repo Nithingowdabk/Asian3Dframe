@@ -4,6 +4,10 @@
       width: 260px !important;
       background: linear-gradient(180deg, #1a1510 0%, #2e2010 100%) !important;
       color: #fff !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+      justify-content: flex-start !important;
     }
 
     .sidebar .logo,

@@ -6,6 +6,9 @@
 
   .sidebar {
     display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
