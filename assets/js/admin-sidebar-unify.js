@@ -81,7 +81,6 @@
         { href: 'products.html', icon: 'fa-box', text: 'Manage Products' },
         { href: 'albums.html', icon: 'fa-folder-open', text: 'Manage Albums' },
         { href: 'categories.html', icon: 'fa-tags', text: 'Manage Categories' },
-        { href: 'manage-prices.html', icon: 'fa-dollar-sign', text: 'Frame Prices' },
       ],
     },
     {
