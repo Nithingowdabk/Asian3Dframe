@@ -40,10 +40,16 @@
 
   .topbar,
   .top {
-    padding-left: 14px !important;
+    padding-left: 64px !important;
     padding-right: 14px !important;
     gap: 10px;
     flex-wrap: wrap;
+  }
+
+  .topbar-title,
+  .topbar .admin-label,
+  .top .title {
+    margin-left: 0 !important;
   }
 
   .topbar-title,
