@@ -290,7 +290,7 @@
         let totalPrice = o.items.reduce((sum, i) => sum + (i.quantity * i.price), 0);
         itemsHtml = `
           <table class="items-table">
-            <thead><tr><th>Product</th><th>Photo</th><th>Frame Type</th><th>Frame Size</th><th>Qty</th><th>Price</th><th>Total Price</th></tr></thead>
+            <thead><tr><th>Product</th><th>Photo</th><th>Frame Type</th><th>Frame Size</th><th>Qty</th><th>Price</th></tr></thead>
             <tbody>
               ${o.items.map(i => `
                 <tr>
@@ -319,7 +319,6 @@
                   <td>${esc(i.frame_size || 'A4')}</td>
                   <td>${i.quantity}</td>
                   <td>${parseFloat(i.price).toFixed(0)} INR</td>
-                  <td>${(i.quantity * i.price).toFixed(0)} INR</td>
                 </tr>`).join('')}
             </tbody>
           </table>`;
