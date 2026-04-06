@@ -289,7 +289,7 @@
       if (o.items && o.items.length) {
         itemsHtml = `
           <table class="items-table">
-            <thead><tr><th>Product</th><th>Photo</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+            <thead><tr><th>Product</th><th>Photo</th><th>Frame Type</th><th>Frame Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
             <tbody>
               ${o.items.map(i => `
                 <tr>
@@ -314,6 +314,8 @@
                       `;
                     })()}
                   </td>
+                  <td><span style="font-weight:600;text-transform:capitalize;">${esc(i.frame_type || 'normal')}</span></td>
+                  <td>${esc(i.frame_size || 'A4')}</td>
                   <td>${i.quantity}</td>
                   <td>${parseFloat(i.price).toFixed(0)} INR</td>
                   <td>${(i.quantity * i.price).toFixed(0)} INR</td>

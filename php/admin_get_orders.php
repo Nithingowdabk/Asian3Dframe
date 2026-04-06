@@ -68,6 +68,7 @@ while ($order = $result->fetch_assoc()) {
     /* ── Fetch items for this order ── */
     $itemStmt = $conn->prepare(
         'SELECT oi.quantity, oi.price, oi.custom_message, oi.custom_photo, oi.photo,
+                oi.frame_type, oi.frame_size,
                 p.name AS product_name, p.image
          FROM order_items oi
          LEFT JOIN products p ON oi.product_id = p.id
@@ -86,6 +87,8 @@ while ($order = $result->fetch_assoc()) {
             'price'          => (float)$item['price'],
             'custom_message' => $item['custom_message'],
             'custom_photo'   => $item['custom_photo'],
+            'frame_type'     => $item['frame_type'],
+            'frame_size'     => $item['frame_size'],
         ];
     }
     $itemStmt->close();
