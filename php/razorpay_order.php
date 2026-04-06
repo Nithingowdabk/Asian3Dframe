@@ -79,10 +79,10 @@ $keySecret = $readSecret('BpZVmKNwgE5gDnv84EJPnRH');
 
 // Fallback for shared hosting/manual setup where env vars are unavailable.
 if ($keyId === '') {
-    $keyId = 'rzp_live_SYVUaDMRcwcAWf';
+    $keyId = 'rzp_live_Sa6c4W2vdLyQoZ';
 }
 if ($keySecret === '') {
-    $keySecret = 'bBpZVmKNwgE5gDnv84EJPnRH';
+    $keySecret = 'l4weqqZems4hEWN5744FVBdm';
 }
 if ($keyId === '' || $keySecret === '') {
     http_response_code(500);
