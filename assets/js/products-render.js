@@ -514,9 +514,13 @@
     const filtered = list.filter((p) => Number(p?.id || 0) !== currentId);
 
     // Sort by best_seller DESC to prioritize best sellers but still show featured products
-    const featured = filtered
-      .sort((a, b) => (b?.is_best_seller ? 1 : 0) - (a?.is_best_seller ? 1 : 0))
-      .slice(0, 4);
+    // Shuffle filtered products and pick 4 random
+    const shuffled = filtered.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const featured = shuffled.slice(0, 4);
 
     if (!featured.length) {
       section.hidden = true;
