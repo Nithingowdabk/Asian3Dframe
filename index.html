@@ -582,10 +582,17 @@
         const data = await res.json();
         if (!data.success) throw new Error(data.message || 'Failed to load products.');
         const allItems = Array.isArray(data.products) ? data.products : [];
-        let items = allItems.filter((p) => p && !p.is_best_seller).slice(0, 4);
-        if (!items.length) {
-          items = allItems.slice(0, 4);
+        let filtered = allItems.filter((p) => p && !p.is_best_seller);
+        if (!filtered.length) {
+          filtered = allItems;
         }
+        // Shuffle and pick 4 random products
+        const shuffled = [...filtered];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        const items = shuffled.slice(0, 4);
         if (!items.length) {
           grid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:rgba(255,255,255,.65);">No products found.</p>';
           return;
@@ -1198,7 +1205,7 @@
     loadHomeCategories();
     updateCartBadge();
   </script>
-  <script src="assets/js/script.js?v=20260402"></script>
+  <script src="assets/js/script.js?v=20260406"></script>
   <script src="assets/js/recent-viewed.js"></script>
 </body>
 </html>
