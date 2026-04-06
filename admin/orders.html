@@ -287,9 +287,10 @@
       document.getElementById('modalTitle').textContent = `Order #${o.id}`;
       let itemsHtml = '';
       if (o.items && o.items.length) {
+        let totalPrice = o.items.reduce((sum, i) => sum + (i.quantity * i.price), 0);
         itemsHtml = `
           <table class="items-table">
-            <thead><tr><th>Product</th><th>Photo</th><th>Frame Type</th><th>Frame Size</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+            <thead><tr><th>Product</th><th>Photo</th><th>Frame Type</th><th>Frame Size</th><th>Qty</th><th>Price</th><th>Total Price</th></tr></thead>
             <tbody>
               ${o.items.map(i => `
                 <tr>
