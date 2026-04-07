@@ -68,10 +68,18 @@
         font: 700 6px/1 Inter, Arial, sans-serif;
         letter-spacing: .9px;
         fill: #ffffff;
-        mix-blend-mode: difference;
+        mix-blend-mode: normal;
         paint-order: stroke;
         stroke: rgba(0,0,0,.25);
         stroke-width: .45px;
+      }
+      .g4y-recent-btn.g4y-recent-on-light .g4y-recent-ring text {
+        fill: #1a1510;
+        stroke: rgba(255,255,255,.55);
+      }
+      .g4y-recent-btn.g4y-recent-on-dark .g4y-recent-ring text {
+        fill: #ffffff;
+        stroke: rgba(0,0,0,.35);
       }
       .g4y-recent-icon {
         position: absolute;
@@ -254,6 +262,72 @@
     ensureStyles();
     const ui = createUi();
 
+    const parseRgb = (value) => {
+      const match = String(value || '').match(/rgba?\(([^)]+)\)/i);
+      if (!match) return null;
+      const parts = match[1].split(',').map((p) => Number(p.trim()));
+      if (parts.length < 3 || parts.some((n) => !Number.isFinite(n))) return null;
+      return {
+        r: Math.max(0, Math.min(255, parts[0])),
+        g: Math.max(0, Math.min(255, parts[1])),
+        b: Math.max(0, Math.min(255, parts[2])),
+        a: parts.length >= 4 && Number.isFinite(parts[3]) ? Math.max(0, Math.min(1, parts[3])) : 1
+      };
+    };
+
+    const getElementBg = (node) => {
+      let el = node;
+      while (el && el !== document.documentElement) {
+        const bg = parseRgb(getComputedStyle(el).backgroundColor);
+        if (bg && bg.a > 0.01) return bg;
+        el = el.parentElement;
+      }
+      const bodyBg = parseRgb(getComputedStyle(document.body).backgroundColor);
+      return bodyBg || { r: 255, g: 255, b: 255, a: 1 };
+    };
+
+    const relativeLuminance = ({ r, g, b }) => {
+      const toLinear = (channel) => {
+        const c = channel / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      };
+      return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+    };
+
+    const updateRingContrast = () => {
+      if (!ui.button || !document.body.contains(ui.button)) return;
+      const rect = ui.button.getBoundingClientRect();
+      const points = [
+        { x: rect.left - 10, y: rect.top + rect.height / 2 },
+        { x: rect.right + 10, y: rect.top + rect.height / 2 },
+        { x: rect.left + rect.width / 2, y: rect.top - 10 },
+        { x: rect.left + rect.width / 2, y: rect.bottom + 10 }
+      ];
+
+      let sampledBg = null;
+      for (const p of points) {
+        if (p.x < 0 || p.y < 0 || p.x > window.innerWidth || p.y > window.innerHeight) continue;
+        const node = document.elementFromPoint(p.x, p.y);
+        if (!node || node === ui.button || ui.button.contains(node)) continue;
+        sampledBg = getElementBg(node);
+        if (sampledBg) break;
+      }
+
+      if (!sampledBg) sampledBg = getElementBg(document.body);
+      const isLight = relativeLuminance(sampledBg) > 0.5;
+      ui.button.classList.toggle('g4y-recent-on-light', isLight);
+      ui.button.classList.toggle('g4y-recent-on-dark', !isLight);
+    };
+
+    let contrastRaf = 0;
+    const scheduleContrastUpdate = () => {
+      if (contrastRaf) return;
+      contrastRaf = window.requestAnimationFrame(() => {
+        contrastRaf = 0;
+        updateRingContrast();
+      });
+    };
+
     const render = () => {
       const items = readItems();
       const deduped = [];
@@ -323,8 +397,11 @@
     window.addEventListener('storage', (e) => {
       if (e.key === STORAGE_KEY) render();
     });
+    window.addEventListener('scroll', scheduleContrastUpdate, { passive: true });
+    window.addEventListener('resize', scheduleContrastUpdate, { passive: true });
 
     render();
+    updateRingContrast();
   };
 
   if (document.readyState === 'loading') {
