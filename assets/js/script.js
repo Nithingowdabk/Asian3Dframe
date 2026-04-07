@@ -1051,15 +1051,15 @@
 		};
 
 		const landscapeSizeScaleMap = {
-			A1: 1.16,
-			A2: 1.08,
-			A3: 0.96,
-			A4: 0.84,
-			"2 FEET X 4 FEET": 1.08,
-			"4 FEET X 4 FEET": 1.0,
-			"4 FEET X 6 FEET": 1.05,
-			"4 FEET X 8 FEET": 1.12,
-			"CUSTOMISED SIZE": 1.14
+			A1: 0.98,
+			A2: 0.92,
+			A3: 0.86,
+			A4: 0.76,
+			"2 FEET X 4 FEET": 0.9,
+			"4 FEET X 4 FEET": 0.92,
+			"4 FEET X 6 FEET": 0.96,
+			"4 FEET X 8 FEET": 0.98,
+			"CUSTOMISED SIZE": 1.0
 		};
 
 		const cache = new Map();
@@ -1155,7 +1155,7 @@
 			const sizeScale = orientation === "horizontal"
 				? (landscapeSizeScaleMap[frameSize] || 1)
 				: (sizeScaleMap[frameSize] || 1);
-			const orientationBoost = orientation === "horizontal" ? 1.28 : 1;
+			const orientationBoost = orientation === "horizontal" ? 0.94 : 1;
 
 			let targetW = baseW;
 			let targetH = targetW / ratio;
@@ -1168,8 +1168,8 @@
 			targetH *= (sizeScale * orientationBoost);
 
 			// Keep the frame inside canvas even for larger sizes.
-			const maxW = canvas.width * (orientation === "horizontal" ? 0.96 : 0.92);
-			const maxH = canvas.height * (orientation === "horizontal" ? 0.96 : 0.92);
+			const maxW = canvas.width * (orientation === "horizontal" ? 0.9 : 0.92);
+			const maxH = canvas.height * (orientation === "horizontal" ? 0.9 : 0.92);
 			if (targetW > maxW || targetH > maxH) {
 				const fitScale = Math.min(maxW / targetW, maxH / targetH);
 				targetW *= fitScale;
