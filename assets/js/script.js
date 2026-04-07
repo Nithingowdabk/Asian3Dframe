@@ -1170,7 +1170,7 @@
 		};
 
 		const drawFrame = (frameImg, rect, frameType, frameColor) => {
-			const thickness = frameType === "mobile" ? Math.max(10, rect.w * 0.05) : Math.max(24, rect.w * 0.105);
+			const thickness = frameType === "mobile" ? Math.max(6, rect.w * 0.032) : Math.max(12, rect.w * 0.062);
 			const ox = rect.x - thickness;
 			const oy = rect.y - thickness;
 			const ow = rect.w + thickness * 2;
