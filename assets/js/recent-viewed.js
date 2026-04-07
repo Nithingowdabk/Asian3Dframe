@@ -57,6 +57,7 @@
         inset: -11px;
         pointer-events: none;
         z-index: 0;
+        isolation: isolate;
       }
       .g4y-recent-ring svg {
         width: 100%;
@@ -66,8 +67,11 @@
       .g4y-recent-ring text {
         font: 700 6px/1 Inter, Arial, sans-serif;
         letter-spacing: .9px;
-        fill: rgba(255,255,255,.98);
-        text-shadow: 0 1px 2px rgba(0,0,0,.35);
+        fill: #ffffff;
+        mix-blend-mode: difference;
+        paint-order: stroke;
+        stroke: rgba(0,0,0,.25);
+        stroke-width: .45px;
       }
       .g4y-recent-icon {
         position: absolute;
@@ -213,7 +217,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'g4y-recent-btn';
-    button.innerHTML = '<span class="g4y-recent-ring" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false"><defs><path id="g4yRecentRingPath" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path></defs><text><textPath href="#g4yRecentRingPath" startOffset="0%">RECENTLY VIEWED • RECENTLY VIEWED • </textPath></text></svg></span><span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
+    button.innerHTML = '<span class="g4y-recent-ring" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false"><defs><path id="g4yRecentRingPath" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path></defs><text><textPath href="#g4yRecentRingPath" startOffset="0%">RECENTLY VIEWED • RECENTLY VIEWED • RECENTLY VIEWED • </textPath></text></svg></span><span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
 
     const overlay = document.createElement('div');
     overlay.className = 'g4y-recent-overlay';
