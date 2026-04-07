@@ -446,8 +446,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .hero-random-wrap {
   position: relative;
-  width: min(440px, 100%);
-  height: 250px;
+  width: min(260px, 78vw);
+  aspect-ratio: 3 / 4;
+  height: auto;
   margin: 0 0 24px;
 }
 
@@ -464,12 +465,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid rgba(255,255,255,.26);
-  box-shadow: 0 14px 36px rgba(0,0,0,.35);
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.24);
+  box-shadow: 0 16px 40px rgba(0,0,0,.36);
   transform-origin: 50% 110%;
-  animation: heroDeckShuffle 8s ease-in-out infinite;
-  animation-delay: calc(var(--card-index) * 2s);
+  transform: translate(calc(var(--card-index) * 8px), calc(var(--card-index) * 7px)) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .04)));
+  animation: heroDeckShuffle 8.8s cubic-bezier(.38,.05,.2,.98) infinite;
+  animation-delay: calc(var(--card-index) * 2.2s);
   background: rgba(18, 13, 8, .9);
 }
 
@@ -502,7 +504,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-random-meta strong {
   font-size: .88rem;
   line-height: 1.2;
-  max-width: 68%;
+  max-width: 70%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .hero-random-meta span {
@@ -513,23 +519,23 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 @keyframes heroDeckShuffle {
   0% {
-    opacity: 0;
-    transform: translateY(18px) scale(.93) rotate(-5deg);
+    opacity: .3;
+    transform: translate(calc(var(--card-index) * 8px), calc(var(--card-index) * 7px)) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .05)));
     z-index: 1;
   }
-  10%, 38% {
+  14%, 38% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotate(0deg);
+    transform: translate(0, 0) scale(1) rotate(0deg);
     z-index: 5;
   }
-  52% {
-    opacity: .7;
-    transform: translateY(-4px) scale(.98) rotate(2deg);
+  55% {
+    opacity: .82;
+    transform: translate(10px, 8px) scale(.97) rotate(4deg);
     z-index: 4;
   }
   100% {
     opacity: 0;
-    transform: translateY(-16px) scale(.93) rotate(6deg);
+    transform: translate(-34px, -12px) scale(.9) rotate(-11deg);
     z-index: 1;
   }
 }
@@ -1613,8 +1619,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hero-content { align-items: center; }
   .hero-subtitle { margin: 0 auto 36px; }
   .hero-random-wrap {
-    width: min(370px, 100%);
-    height: 220px;
+    width: min(240px, 72vw);
+    aspect-ratio: 3 / 4;
+    height: auto;
     margin: 0 auto 22px;
   }
   .hero-random-meta {
@@ -1745,8 +1752,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 @media (max-width: 480px) {
   .categories-grid { gap: 12px; }
-  .cat-card { flex-basis: 145px; }
-  .cat-info h3 { font-size: 1.25rem; }
+    width: min(220px, 68vw);
+    aspect-ratio: 3 / 4;
+    height: auto;
   .products-grid   { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .product-card    { max-width: 100%; }
   .product-info    { padding: 10px 10px; }
