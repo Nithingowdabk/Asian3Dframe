@@ -674,7 +674,6 @@
         const allProducts = data.products.filter(p => p && p.id);
         if (!allProducts.length) return;
 
-        let cycleTimer = null;
         const renderDeck = () => {
           const products = shuffleArray(allProducts).slice(0, 4);
           container.innerHTML = products.map((p, idx) => {
