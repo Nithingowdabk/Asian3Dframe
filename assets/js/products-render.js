@@ -450,6 +450,9 @@
 
     if (addBtn) {
       addBtn.addEventListener('click', async () => {
+        if (typeof window.g4yValidateRequiredFrameOptions === 'function' && !window.g4yValidateRequiredFrameOptions()) {
+          return;
+        }
         const qty = getQty();
         const options = typeof window.g4yGetSelectedFrameOptions === 'function'
           ? window.g4yGetSelectedFrameOptions()
@@ -477,6 +480,9 @@
 
     if (buyBtn) {
       buyBtn.addEventListener('click', async () => {
+        if (typeof window.g4yValidateRequiredFrameOptions === 'function' && !window.g4yValidateRequiredFrameOptions()) {
+          return;
+        }
         const qty = getQty();
         const options = typeof window.g4yGetSelectedFrameOptions === 'function'
           ? window.g4yGetSelectedFrameOptions()

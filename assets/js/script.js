@@ -210,6 +210,18 @@
 		let selectedFrameType = normalizeFrameType(typeButtons.find((btn) => btn.classList.contains("is-selected"))?.dataset.frameType || typeButtons[0]?.dataset.frameType);
 		let selectedFrameSize = normalizeFrameSize(sizeButtons.find((btn) => btn.classList.contains("is-selected"))?.dataset.frameSize || sizeButtons[0]?.dataset.frameSize);
 		let selectedFrameColor = normalizeFrameColor(colorButtons.find((btn) => btn.classList.contains("is-selected") && !btn.hidden)?.dataset.frameColor, selectedFrameType);
+		let hasChosenType = false;
+		let hasChosenSize = false;
+
+		const frameTypeOptions = qs("#frameTypeOptions");
+		const frameSizeOptions = qs("#frameSizeOptions");
+		const frameTypeBlock = frameTypeOptions ? frameTypeOptions.closest(".option-block") : null;
+		const frameSizeBlock = frameSizeOptions ? frameSizeOptions.closest(".option-block") : null;
+
+		const clearMissingState = () => {
+			if (frameTypeBlock) frameTypeBlock.classList.remove("g4y-option-missing");
+			if (frameSizeBlock) frameSizeBlock.classList.remove("g4y-option-missing");
+		};
 
 		const ensureValidColorForType = () => {
 			selectedFrameColor = normalizeFrameColor(selectedFrameColor, selectedFrameType);
@@ -287,6 +299,8 @@
 
 		typeButtons.forEach((btn) => {
 			btn.addEventListener("click", () => {
+				hasChosenType = true;
+				clearMissingState();
 				selectedFrameType = normalizeFrameType(btn.dataset.frameType);
 				ensureValidSizeForType();
 				ensureValidColorForType();
@@ -296,6 +310,8 @@
 
 		sizeButtons.forEach((btn) => {
 			btn.addEventListener("click", () => {
+				hasChosenSize = true;
+				clearMissingState();
 				selectedFrameSize = normalizeFrameSize(btn.dataset.frameSize);
 				syncButtons();
 			});
@@ -316,6 +332,32 @@
 			frame_size: selectedFrameSize,
 			frame_color: selectedFrameColor
 		});
+
+		window.g4yValidateRequiredFrameOptions = () => {
+			clearMissingState();
+			const missing = [];
+			if (!hasChosenType) {
+				missing.push("frame type");
+				if (frameTypeBlock) frameTypeBlock.classList.add("g4y-option-missing");
+			}
+			if (!hasChosenSize) {
+				missing.push("frame size");
+				if (frameSizeBlock) frameSizeBlock.classList.add("g4y-option-missing");
+			}
+
+			if (!missing.length) return true;
+
+			const focusTarget = !hasChosenType
+				? (frameTypeOptions || frameTypeBlock)
+				: (frameSizeOptions || frameSizeBlock);
+			if (focusTarget && typeof focusTarget.scrollIntoView === "function") {
+				focusTarget.scrollIntoView({ behavior: "smooth", block: "center" });
+			}
+
+			showToast("Please select frame type and size.", "error", 2400);
+			window.alert(`Please select ${missing.join(" and ")} before continuing.`);
+			return false;
+		};
 	}
 
 	function cartCount() {
