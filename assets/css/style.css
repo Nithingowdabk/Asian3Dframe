@@ -15,9 +15,14 @@
     width: 100%;
     margin-top: 0;
   }
-  .cta-buttons-row > * {
+  .cta-buttons-row > a.btn-ghost {
+    flex: 2 1 0;
+    min-width: 0;
+  }
+  .cta-buttons-row > button.btn-ghost {
     flex: 1 1 0;
     min-width: 0;
+    max-width: 120px;
   }
 }
 @media (max-width: 1099px) {
