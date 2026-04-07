@@ -1817,23 +1817,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   .footer-grid     { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom   { flex-direction: column; text-align: center; }
-
-  .hero-btns {
-    width: min(520px, 100%);
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center;
-    gap: 10px;
-  }
-  .hero-btns .btn-primary {
-    flex: 1 1 100%;
-    justify-content: center;
-  }
-  .hero-btns .btn-ghost {
-    flex: 1 1 calc(50% - 5px);
-    min-width: 0;
-    justify-content: center;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1847,11 +1830,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 @media (max-width: 480px) {
   .categories-grid { gap: 12px; }
-  .hero-random-wrap {
     width: min(220px, 68vw);
     aspect-ratio: 3 / 4;
     height: auto;
-  }
   .products-grid   { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .product-card    { max-width: 100%; }
   .product-info    { padding: 10px 10px; }
@@ -1866,7 +1847,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .step-card h3 { font-size: 0.92rem; margin-bottom: 4px; }
   .step-card p { font-size: 0.75rem; line-height: 1.3; }
   .step-card p { display: none; }
-  .hero-btns       { align-items: stretch; }
+  .hero-btns       { flex-direction: column; align-items: center; }
   .hero-title      { font-size: 2.6rem; }
 }
 
