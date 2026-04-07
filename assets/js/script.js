@@ -1050,6 +1050,18 @@
 			"CUSTOMISED SIZE": 1.1
 		};
 
+		const landscapeSizeScaleMap = {
+			A1: 1.16,
+			A2: 1.08,
+			A3: 0.96,
+			A4: 0.84,
+			"2 FEET X 4 FEET": 1.08,
+			"4 FEET X 4 FEET": 1.0,
+			"4 FEET X 6 FEET": 1.05,
+			"4 FEET X 8 FEET": 1.12,
+			"CUSTOMISED SIZE": 1.14
+		};
+
 		const cache = new Map();
 		const state = {
 			scene: "living_table",
@@ -1124,31 +1136,6 @@
 			ctx.drawImage(image, dx, dy, drawW, drawH);
 		};
 
-		const rotateImage90 = (image) => {
-			const buffer = document.createElement("canvas");
-			buffer.width = image.height;
-			buffer.height = image.width;
-			const bctx = buffer.getContext("2d");
-			if (!bctx) return image;
-			bctx.translate(buffer.width / 2, buffer.height / 2);
-			bctx.rotate(Math.PI / 2);
-			bctx.drawImage(image, -image.width / 2, -image.height / 2);
-			return buffer;
-		};
-
-		const drawPhotoForOrientation = (image, rect, orientation) => {
-			const needsRotate = orientation === "horizontal" && image.height > image.width;
-			const source = needsRotate ? rotateImage90(image) : image;
-
-			if (orientation === "horizontal") {
-				// Landscape mode should preserve the full image without cropping.
-				containDraw(source, rect.x, rect.y, rect.w, rect.h);
-				return;
-			}
-
-			coverDraw(source, rect.x, rect.y, rect.w, rect.h);
-		};
-
 		const getOrientedRatio = (frameSize, orientation) => {
 			const baseRatio = sizeAspectMap[frameSize] || sizeAspectMap.A4;
 			if (orientation === "horizontal") {
@@ -1165,7 +1152,9 @@
 			const cx = canvas.width * base.x;
 			const cy = canvas.height * base.y;
 			const ratio = getOrientedRatio(frameSize, orientation);
-			const sizeScale = sizeScaleMap[frameSize] || 1;
+			const sizeScale = orientation === "horizontal"
+				? (landscapeSizeScaleMap[frameSize] || 1)
+				: (sizeScaleMap[frameSize] || 1);
 
 			let targetW = baseW;
 			let targetH = targetW / ratio;
@@ -1334,7 +1323,8 @@
 				ctx.rect(rect.x, rect.y, rect.w, rect.h);
 				ctx.clip();
 				if (state.photo) {
-					drawPhotoForOrientation(state.photo, rect, state.photoOrientation);
+					// Use cover so photo fills frame opening without top/bottom gaps.
+					coverDraw(state.photo, rect.x, rect.y, rect.w, rect.h);
 					drawBacklightGlow(rect, options.frameType);
 					drawPhotoGloss(rect, options.frameType);
 				} else {
