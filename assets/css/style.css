@@ -1,3 +1,20 @@
+@media (min-width: 1100px) {
+  .hero {
+    position: relative;
+  }
+  .hero-random-wrap {
+    position: absolute !important;
+    right: 0 !important;
+    left: auto !important;
+    top: 50%;
+    transform: translateY(-50%);
+    width: min(340px, 28vw);
+    max-height: 480px;
+    margin: 0;
+    z-index: 10;
+    display: block;
+  }
+}
 /* Dark brown button for Buy Now */
 .btn-brown {
   background: linear-gradient(135deg, #4e2e13, #2d1a07);
@@ -567,28 +584,6 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 52px;
-}
-
-@media (min-width: 901px) {
-  .hero {
-    position: relative;
-  }
-
-  .hero-content {
-    max-width: 560px;
-    z-index: 2;
-  }
-
-  .hero-random-wrap {
-    position: absolute;
-    right: 78%;
-    top: 58%;
-    transform: translateY(-50%);
-    width: min(300px, 24vw);
-    max-height: 420px;
-    margin: 0;
-    z-index: 2;
-  }
 }
 
 /* ── HERO ALBUM PICKER ────────────────────────────────────────────── */
