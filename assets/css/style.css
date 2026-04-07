@@ -1,11 +1,21 @@
-@media (max-width: 1099px) {
-  .hero-btns {
+/* Mobile: Custom Photo Frame and Album buttons side by side */
+@media (max-width: 600px) {
+  .cta-buttons-row {
     display: flex;
     flex-direction: row;
-    gap: 10px;
-    flex-wrap: nowrap;
+    gap: 12px;
     justify-content: center;
     align-items: center;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .cta-buttons-row > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+@media (max-width: 1099px) {
+  .hero-btns {
     margin-bottom: 0;
   }
   .hero-random-wrap {
