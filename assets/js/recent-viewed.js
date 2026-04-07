@@ -50,7 +50,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        overflow: hidden;
+        overflow: visible;
       }
       .g4y-recent-ring {
         position: absolute;
@@ -64,9 +64,10 @@
         display: block;
       }
       .g4y-recent-ring text {
-        font: 700 5px/1 Inter, Arial, sans-serif;
-        letter-spacing: .95px;
-        fill: rgba(255,255,255,.9);
+        font: 700 6px/1 Inter, Arial, sans-serif;
+        letter-spacing: .9px;
+        fill: rgba(255,255,255,.98);
+        text-shadow: 0 1px 2px rgba(0,0,0,.35);
       }
       .g4y-recent-icon {
         position: absolute;
@@ -200,8 +201,8 @@
           inset: -10px;
         }
         .g4y-recent-ring text {
-          font-size: 4.6px;
-          letter-spacing: .86px;
+          font-size: 5.2px;
+          letter-spacing: .82px;
         }
       }
     `;
