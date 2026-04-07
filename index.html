@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Asian3DFrames – Frame Your Memories</title>
-  <link rel="stylesheet" href="assets/css/style.css?v=20260407"/>
+  <link rel="stylesheet" href="assets/css/style.css?v=20260407b"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -57,6 +57,11 @@
       <p class="hero-subtitle">
         Turn your cherished moments into timeless art. Personalised, handcrafted photo frames — delivered to your door.
       </p>
+      <div class="hero-random-wrap" aria-label="Random featured products">
+        <div class="hero-random-deck" id="heroProductsContainer">
+          <!-- Random hero products will load here -->
+        </div>
+      </div>
       <div class="hero-btns">
         <a href="products.html" class="btn btn-primary">
           Shop Now <i class="fas fa-arrow-right"></i>
@@ -71,14 +76,6 @@
 
       <!-- hero-stats removed as requested -->
     </div>
-
-    <!-- Hero visual -->
-    <div class="hero-visual">
-      <div class="frame-showcase" id="heroProductsContainer">
-        <!-- Products will load here -->
-      </div>
-    </div>
-
     <div class="hero-scroll-hint">
       <span>Scroll to explore</span>
       <i class="fas fa-chevron-down"></i>
@@ -675,26 +672,31 @@
         const data = await res.json();
         if (!data.success || !Array.isArray(data.products)) return;
         const allProducts = data.products.filter(p => p && p.id);
-        const products = shuffleArray(allProducts).slice(0, 3);
-        if (!products.length) return;
+        if (!allProducts.length) return;
 
-        container.innerHTML = products.map((p, idx) => {
-          const img = String(p.image || '').trim() || 'https://placehold.co/380x300/f5e6d3/c8956c?text=Asian3DFrames';
-          const name = String(p.name || '').trim() || 'Product';
-          const productUrl = `product.html?id=${encodeURIComponent(p.id)}`;
-          const frameClass = idx === 0 ? 'main-frame' : `side-frame ${idx === 1 ? 'top-frame' : 'bottom-frame'}`;
-          const borderClass = idx === 0 ? 'golden' : idx === 1 ? 'silver' : 'dark';
-          return `
-            <a href="${productUrl}" class="frame-card ${frameClass}" style="text-decoration:none;">
-              <div class="frame-border ${borderClass}">
-                <div class="frame-inner">
-                  <img src="${img}" alt="${name}" onerror="this.src='https://placehold.co/380x300/f5e6d3/c8956c?text=Asian3DFrames'"/>
+        let cycleTimer = null;
+        const renderDeck = () => {
+          const products = shuffleArray(allProducts).slice(0, 4);
+          container.innerHTML = products.map((p, idx) => {
+            const img = String(p.image || '').trim() || 'https://placehold.co/500x360/f5e6d3/c8956c?text=Asian3DFrames';
+            const name = String(p.name || '').trim() || 'Product';
+            const price = Number(p.price || 0);
+            const productUrl = `product.html?id=${encodeURIComponent(p.id)}`;
+            return `
+              <a href="${productUrl}" class="hero-random-card" style="--card-index:${idx};text-decoration:none;" aria-label="${name}">
+                <img src="${img}" alt="${name}" onerror="this.src='https://placehold.co/500x360/f5e6d3/c8956c?text=Asian3DFrames'"/>
+                <div class="hero-random-meta">
+                  <strong>${name}</strong>
+                  <span>${price > 0 ? `${price.toFixed(0)} INR` : 'View Product'}</span>
                 </div>
-              </div>
-              <div class="frame-label">${name}</div>
-            </a>
-          `;
-        }).join('');
+              </a>
+            `;
+          }).join('');
+        };
+
+        renderDeck();
+        if (window.heroDeckRotateTimer) clearInterval(window.heroDeckRotateTimer);
+        window.heroDeckRotateTimer = setInterval(renderDeck, 6500);
       } catch (_err) {
         // Keep static layout if load fails
       }
