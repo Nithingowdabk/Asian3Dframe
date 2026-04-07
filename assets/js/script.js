@@ -1155,6 +1155,7 @@
 			const sizeScale = orientation === "horizontal"
 				? (landscapeSizeScaleMap[frameSize] || 1)
 				: (sizeScaleMap[frameSize] || 1);
+			const orientationBoost = orientation === "horizontal" ? 1.28 : 1;
 
 			let targetW = baseW;
 			let targetH = targetW / ratio;
@@ -1163,12 +1164,12 @@
 				targetW = targetH * ratio;
 			}
 
-			targetW *= sizeScale;
-			targetH *= sizeScale;
+			targetW *= (sizeScale * orientationBoost);
+			targetH *= (sizeScale * orientationBoost);
 
 			// Keep the frame inside canvas even for larger sizes.
-			const maxW = canvas.width * 0.92;
-			const maxH = canvas.height * 0.92;
+			const maxW = canvas.width * (orientation === "horizontal" ? 0.96 : 0.92);
+			const maxH = canvas.height * (orientation === "horizontal" ? 0.96 : 0.92);
 			if (targetW > maxW || targetH > maxH) {
 				const fitScale = Math.min(maxW / targetW, maxH / targetH);
 				targetW *= fitScale;
