@@ -685,10 +685,6 @@
             return `
               <a href="${productUrl}" class="hero-random-card" style="--card-index:${idx};text-decoration:none;" aria-label="${name}">
                 <img src="${img}" alt="${name}" onerror="this.src='https://placehold.co/450x600/f5e6d3/c8956c?text=Asian3DFrames'"/>
-                <div class="hero-random-meta">
-                  <strong>${name}</strong>
-                  <span>${price > 0 ? `${price.toFixed(0)} INR` : 'View Product'}</span>
-                </div>
               </a>
             `;
           }).join('');
