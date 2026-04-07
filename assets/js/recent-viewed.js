@@ -77,6 +77,16 @@
         padding: 0 6px;
         box-shadow: inset 0 0 0 1px rgba(255,255,255,.28);
       }
+      .g4y-recent-label {
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font: 600 10px/1 Inter, Arial, sans-serif;
+        color: #6b7280;
+        white-space: nowrap;
+        pointer-events: none;
+      }
       .g4y-recent-panel {
         position: fixed;
         top: 0;
@@ -188,7 +198,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'g4y-recent-btn';
-    button.innerHTML = '<span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
+    button.innerHTML = '<span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span><span class="g4y-recent-label">Recently Viewed</span>';
 
     const overlay = document.createElement('div');
     overlay.className = 'g4y-recent-overlay';
