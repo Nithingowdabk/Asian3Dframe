@@ -2,6 +2,9 @@
   .hero-btns {
     margin-bottom: 0;
   }
+  .hero-random-wrap {
+    margin-bottom: 0 !important;
+  }
 }
 @media (max-width: 1099px) {
   .hero-random-card {
