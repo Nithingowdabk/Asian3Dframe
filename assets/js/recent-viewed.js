@@ -40,27 +40,42 @@
         z-index: 10020;
         border: 0;
         border-radius: 999px;
-        padding: 12px 16px;
-        font: 700 12px/1 Inter, Arial, sans-serif;
-        letter-spacing: .02em;
+        width: 46px;
+        height: 46px;
+        padding: 0;
         color: #fff;
         background: linear-gradient(135deg, #1a1510, #3d2912);
         box-shadow: 0 12px 30px rgba(0,0,0,.25);
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        justify-content: center;
         cursor: pointer;
+        overflow: hidden;
       }
-      .g4y-recent-count {
-        min-width: 18px;
-        height: 18px;
-        border-radius: 999px;
-        font-size: 11px;
-        background: #c8956c;
+      .g4y-recent-icon {
+        position: absolute;
+        inset: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0 5px;
+        font-size: 18px;
+        opacity: .35;
+        pointer-events: none;
+      }
+      .g4y-recent-count {
+        position: relative;
+        z-index: 1;
+        min-width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        font: 700 12px/1 Inter, Arial, sans-serif;
+        background: rgba(200,149,108,.92);
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 6px;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,.28);
       }
       .g4y-recent-panel {
         position: fixed;
@@ -156,12 +171,12 @@
         font: 500 13px/1.4 Inter, Arial, sans-serif;
         padding: 12px;
       }
-      @media (max-width: 640px) {
+      @media (max-width: 760px) {
         .g4y-recent-btn {
           right: 12px;
-          bottom: 14px;
-          padding: 11px 13px;
-          font-size: 11px;
+          bottom: calc(86px + env(safe-area-inset-bottom));
+          width: 44px;
+          height: 44px;
         }
       }
     `;
@@ -172,7 +187,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'g4y-recent-btn';
-    button.innerHTML = '<i class="fas fa-clock-rotate-left"></i><span>Recently Viewed</span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
+    button.innerHTML = '<span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
 
     const overlay = document.createElement('div');
     overlay.className = 'g4y-recent-overlay';
