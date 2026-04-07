@@ -463,10 +463,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .hero-random-wrap {
   position: relative;
-  width: min(260px, 78vw);
+  width: min(180px, 60vw);
   aspect-ratio: 3 / 4;
   height: auto;
-  max-height: 360px;
+  max-height: 240px;
   margin: 0 0 24px;
 }
 
