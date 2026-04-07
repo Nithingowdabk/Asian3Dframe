@@ -1525,7 +1525,38 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .hero-btns     { justify-content: center; }
   .hero-stats    { justify-content: center; }
 
-  .hero-visual { display: none; }
+  .hero-visual {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .frame-showcase {
+    height: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 2px 2px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .frame-showcase::-webkit-scrollbar { height: 0; }
+  .frame-card,
+  .main-frame,
+  .top-frame,
+  .bottom-frame {
+    position: static;
+    width: 180px;
+    min-width: 180px;
+    animation: none;
+    scroll-snap-align: start;
+  }
+  .frame-label {
+    margin-top: 8px;
+    font-size: .74rem;
+  }
 
   .upload-layout { grid-template-columns: 1fr; gap: 48px; }
 
