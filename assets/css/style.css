@@ -581,7 +581,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
   .hero-random-wrap {
     position: absolute;
-    right: 8%;
+    right: 78%;
     top: 58%;
     transform: translateY(-50%);
     width: min(300px, 24vw);
