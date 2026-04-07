@@ -40,8 +40,8 @@
         z-index: 10020;
         border: 0;
         border-radius: 999px;
-        width: 46px;
-        height: 46px;
+        width: 50px;
+        height: 50px;
         padding: 0;
         color: #fff;
         background: linear-gradient(135deg, #1a1510, #3d2912);
@@ -52,6 +52,22 @@
         cursor: pointer;
         overflow: hidden;
       }
+      .g4y-recent-ring {
+        position: absolute;
+        inset: -11px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .g4y-recent-ring svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .g4y-recent-ring text {
+        font: 700 5px/1 Inter, Arial, sans-serif;
+        letter-spacing: .95px;
+        fill: rgba(255,255,255,.9);
+      }
       .g4y-recent-icon {
         position: absolute;
         inset: 0;
@@ -60,11 +76,12 @@
         justify-content: center;
         font-size: 18px;
         opacity: .35;
+        z-index: 1;
         pointer-events: none;
       }
       .g4y-recent-count {
         position: relative;
-        z-index: 1;
+        z-index: 2;
         min-width: 26px;
         height: 26px;
         border-radius: 999px;
@@ -76,16 +93,6 @@
         justify-content: center;
         padding: 0 6px;
         box-shadow: inset 0 0 0 1px rgba(255,255,255,.28);
-      }
-      .g4y-recent-label {
-        position: absolute;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font: 600 10px/1 Inter, Arial, sans-serif;
-        color: #6b7280;
-        white-space: nowrap;
-        pointer-events: none;
       }
       .g4y-recent-panel {
         position: fixed;
@@ -186,8 +193,15 @@
           left: 12px;
           right: auto;
           bottom: calc(96px + env(safe-area-inset-bottom));
-          width: 44px;
-          height: 44px;
+          width: 46px;
+          height: 46px;
+        }
+        .g4y-recent-ring {
+          inset: -10px;
+        }
+        .g4y-recent-ring text {
+          font-size: 4.6px;
+          letter-spacing: .86px;
         }
       }
     `;
@@ -198,7 +212,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'g4y-recent-btn';
-    button.innerHTML = '<span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span><span class="g4y-recent-label">Recently Viewed</span>';
+    button.innerHTML = '<span class="g4y-recent-ring" aria-hidden="true"><svg viewBox="0 0 100 100" focusable="false"><defs><path id="g4yRecentRingPath" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path></defs><text><textPath href="#g4yRecentRingPath" startOffset="0%">RECENTLY VIEWED • RECENTLY VIEWED • </textPath></text></svg></span><span class="g4y-recent-icon" aria-hidden="true"><i class="fas fa-clock-rotate-left"></i></span><span class="g4y-recent-count" id="g4yRecentCount">0</span>';
 
     const overlay = document.createElement('div');
     overlay.className = 'g4y-recent-overlay';
