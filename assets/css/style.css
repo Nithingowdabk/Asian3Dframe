@@ -1,8 +1,9 @@
 /* Mobile: Custom Photo Frame and Album buttons side by side */
 @media (max-width: 600px) {
   .cta-buttons-row {
-    display: flex;
-    flex-direction: row;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     gap: 12px;
     justify-content: center;
     align-items: center;
