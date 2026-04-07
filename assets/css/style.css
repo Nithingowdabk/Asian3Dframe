@@ -457,6 +457,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: relative;
   width: 100%;
   height: 100%;
+  transition: opacity .45s cubic-bezier(.22,.61,.36,1);
+  will-change: opacity;
+}
+
+.hero-random-deck.is-refreshing {
+  opacity: .72;
 }
 
 .hero-random-card {
@@ -473,10 +479,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   border: 1px solid rgba(255,255,255,.24);
   box-shadow: 0 16px 40px rgba(0,0,0,.36);
   transform-origin: 50% 110%;
-  transform: translate(calc(var(--card-index) * 8px), calc(var(--card-index) * 7px)) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .04)));
-  animation: heroDeckShuffle 8.8s cubic-bezier(.38,.05,.2,.98) infinite;
-  animation-delay: calc(var(--card-index) * 2.2s);
+  transform: translate3d(calc(var(--card-index) * 8px), calc(var(--card-index) * 7px), 0) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .04)));
+  animation: heroDeckShuffle 16s cubic-bezier(.22,.61,.36,1) infinite;
+  animation-delay: calc(var(--card-index) * 4s);
   background: rgba(18, 13, 8, .9);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .hero-random-card img {
@@ -525,24 +533,32 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 @keyframes heroDeckShuffle {
   0% {
-    opacity: .3;
-    transform: translate(calc(var(--card-index) * 8px), calc(var(--card-index) * 7px)) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .05)));
+    opacity: .2;
+    transform: translate3d(calc(var(--card-index) * 10px), calc(var(--card-index) * 8px), 0) rotate(calc((var(--card-index) - 1.5) * 4deg)) scale(calc(1 - (var(--card-index) * .06)));
     z-index: 1;
   }
-  14%, 38% {
+  10%, 44% {
     opacity: 1;
-    transform: translate(0, 0) scale(1) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
     z-index: 5;
   }
-  55% {
-    opacity: .82;
-    transform: translate(10px, 8px) scale(.97) rotate(4deg);
+  62% {
+    opacity: .92;
+    transform: translate3d(8px, 8px, 0) scale(.98) rotate(3deg);
     z-index: 4;
   }
   100% {
     opacity: 0;
-    transform: translate(-34px, -12px) scale(.9) rotate(-11deg);
+    transform: translate3d(-28px, -8px, 0) scale(.9) rotate(-9deg);
     z-index: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-random-card {
+    animation: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
   }
 }
 
@@ -551,6 +567,28 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   gap: 16px;
   flex-wrap: wrap;
   margin-bottom: 52px;
+}
+
+@media (min-width: 901px) {
+  .hero {
+    position: relative;
+  }
+
+  .hero-content {
+    max-width: 560px;
+    z-index: 2;
+  }
+
+  .hero-random-wrap {
+    position: absolute;
+    right: 8%;
+    top: 58%;
+    transform: translateY(-50%);
+    width: min(300px, 24vw);
+    max-height: 420px;
+    margin: 0;
+    z-index: 2;
+  }
 }
 
 /* ── HERO ALBUM PICKER ────────────────────────────────────────────── */
