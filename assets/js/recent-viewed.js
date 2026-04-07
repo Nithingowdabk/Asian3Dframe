@@ -173,8 +173,9 @@
       }
       @media (max-width: 760px) {
         .g4y-recent-btn {
-          right: 12px;
-          bottom: calc(86px + env(safe-area-inset-bottom));
+          left: 12px;
+          right: auto;
+          bottom: calc(96px + env(safe-area-inset-bottom));
           width: 44px;
           height: 44px;
         }
