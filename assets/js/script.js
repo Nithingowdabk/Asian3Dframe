@@ -1124,6 +1124,31 @@
 			ctx.drawImage(image, dx, dy, drawW, drawH);
 		};
 
+		const rotateImage90 = (image) => {
+			const buffer = document.createElement("canvas");
+			buffer.width = image.height;
+			buffer.height = image.width;
+			const bctx = buffer.getContext("2d");
+			if (!bctx) return image;
+			bctx.translate(buffer.width / 2, buffer.height / 2);
+			bctx.rotate(Math.PI / 2);
+			bctx.drawImage(image, -image.width / 2, -image.height / 2);
+			return buffer;
+		};
+
+		const drawPhotoForOrientation = (image, rect, orientation) => {
+			const needsRotate = orientation === "horizontal" && image.height > image.width;
+			const source = needsRotate ? rotateImage90(image) : image;
+
+			if (orientation === "horizontal") {
+				// Landscape mode should preserve the full image without cropping.
+				containDraw(source, rect.x, rect.y, rect.w, rect.h);
+				return;
+			}
+
+			coverDraw(source, rect.x, rect.y, rect.w, rect.h);
+		};
+
 		const getOrientedRatio = (frameSize, orientation) => {
 			const baseRatio = sizeAspectMap[frameSize] || sizeAspectMap.A4;
 			if (orientation === "horizontal") {
@@ -1309,8 +1334,7 @@
 				ctx.rect(rect.x, rect.y, rect.w, rect.h);
 				ctx.clip();
 				if (state.photo) {
-					// Use cover so photo fills frame opening without top/bottom gaps.
-					coverDraw(state.photo, rect.x, rect.y, rect.w, rect.h);
+					drawPhotoForOrientation(state.photo, rect, state.photoOrientation);
 					drawBacklightGlow(rect, options.frameType);
 					drawPhotoGloss(rect, options.frameType);
 				} else {
