@@ -829,16 +829,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .frame-card { position: absolute; }
 
 .frame-border {
-  padding: 7px;
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.10);
+  padding: 3px;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
 }
 
 @media (max-width: 1099px) {
   .frame-border {
-    padding: 4px;
-    border-radius: 4px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    padding: 1px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04);
   }
 }
 .frame-border.golden {
