@@ -4,7 +4,7 @@
   }
   .hero-random-wrap {
     position: absolute !important;
-    right: 0 !important;
+    right: 40px !important;
     left: auto !important;
     top: 50%;
     transform: translateY(-50%);
