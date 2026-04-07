@@ -1,4 +1,9 @@
 @media (max-width: 1099px) {
+  .hero-btns {
+    margin-bottom: 24px;
+  }
+}
+@media (max-width: 1099px) {
   .hero-random-card {
     width: 70%;
     height: 48vw;
