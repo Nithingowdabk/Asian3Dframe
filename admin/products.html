@@ -55,6 +55,12 @@
     .image-preview-item{aspect-ratio:3/4;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.08);background:#faf7f4;}
     .image-preview-item img{width:100%;height:100%;object-fit:cover;display:block;}
     .image-preview-empty{margin-top:10px;color:var(--mid);font-size:.82rem;}
+    .image-upload-zone{border:2px dashed rgba(200,149,108,.45);border-radius:12px;background:var(--light);padding:18px;text-align:center;cursor:pointer;transition:border-color .2s ease,background .2s ease;}
+    .image-upload-zone:hover,.image-upload-zone.dragover{border-color:var(--gold-dark);background:#f8f1ea;}
+    .image-upload-zone i{font-size:1.3rem;color:var(--gold-dark);display:block;margin-bottom:6px;}
+    .image-upload-zone p{font-size:.86rem;color:var(--mid);}
+    .image-upload-zone small{display:block;margin-top:4px;font-size:.76rem;color:var(--mid);}
+    .image-upload-status{margin-top:8px;color:var(--mid);font-size:.8rem;}
     .pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:999px;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;}
     .pill.best{background:rgba(200,149,108,.2);color:var(--gold-dark);border:1px solid rgba(200,149,108,.5);}
     .checkline{display:flex;align-items:center;gap:8px;margin-top:8px;}
@@ -117,28 +123,27 @@
         </div>
         <div class="grid">
           <div class="group">
-            <label for="ePrice">Price</label>
-            <input id="ePrice" type="number" min="1" step="0.01" required />
-          </div>
-          <div class="group">
-            <label for="eOldPrice">Old Price</label>
-            <input id="eOldPrice" type="number" min="0" step="0.01" />
-          </div>
-        </div>
-        <div class="grid">
-          <div class="group">
-            <label for="eStock">Stock</label>
-            <input id="eStock" type="number" min="0" required />
-            <div class="checkline">
+            <div class="checkline" style="margin-top:0;">
               <input id="eBestSeller" type="checkbox" />
               <label for="eBestSeller">Best Seller</label>
             </div>
           </div>
-          <div class="group">
-            <label for="eImages">Image Paths</label>
-            <textarea id="eImages" placeholder="One image path per line"></textarea>
-          </div>
         </div>
+        <input id="ePrice" type="hidden" />
+        <input id="eOldPrice" type="hidden" />
+        <input id="eStock" type="hidden" />
+
+        <div class="group">
+          <label for="eImageUpload">Product Images</label>
+          <div id="eImageUploadZone" class="image-upload-zone" role="button" tabindex="0">
+            <input id="eImageUpload" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden />
+            <i class="fas fa-image"></i>
+            <p>Click or drag and drop to select new product images</p>
+            <small>JPEG, PNG, WEBP. Max 5 MB each. Up to 6 images.</small>
+          </div>
+          <div id="eImageUploadStatus" class="image-upload-status">No new images selected. Existing images will be kept.</div>
+        </div>
+
         <div class="group">
           <label>Image Preview</label>
           <div id="eImagesPreview" class="image-preview-grid"></div>
@@ -165,9 +170,13 @@
 
     const modal = document.getElementById('editModal');
     const editForm = document.getElementById('editForm');
+    const eImageUpload = document.getElementById('eImageUpload');
+    const eImageUploadZone = document.getElementById('eImageUploadZone');
+    const eImageUploadStatus = document.getElementById('eImageUploadStatus');
 
     let products = [];
     let categories = [];
+    let selectedEditFiles = [];
 
     const getCategoryName = (id) => {
       const cat = categories.find(c => c.id == id);
@@ -233,11 +242,67 @@
       emptyState.style.display = preview.children.length ? 'none' : 'block';
     }
 
-    function parseImageInput(value) {
-      return String(value || '')
-        .split(/\r?\n|,/)
-        .map((item) => item.trim())
-        .filter(Boolean);
+    function fileToDataUrl(file) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => resolve('');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function validateImageFiles(files) {
+      const valid = [];
+      const errors = [];
+      const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+
+      for (const file of files) {
+        if (!allowed.includes(file.type)) {
+          errors.push(`${file.name}: invalid format`);
+          continue;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          errors.push(`${file.name}: exceeds 5 MB`);
+          continue;
+        }
+        valid.push(file);
+      }
+
+      if (valid.length > 6) {
+        errors.push('You can select up to 6 images.');
+        return { files: valid.slice(0, 6), errors };
+      }
+
+      return { files: valid, errors };
+    }
+
+    function updateEditUploadStatus(errors = []) {
+      if (errors.length) {
+        eImageUploadStatus.textContent = errors.join(' | ');
+        eImageUploadStatus.style.color = '#b91c1c';
+        return;
+      }
+
+      if (selectedEditFiles.length) {
+        eImageUploadStatus.textContent = `${selectedEditFiles.length} new image(s) selected. Saving will replace existing images.`;
+        eImageUploadStatus.style.color = '#166534';
+        return;
+      }
+
+      eImageUploadStatus.textContent = 'No new images selected. Existing images will be kept.';
+      eImageUploadStatus.style.color = '';
+    }
+
+    async function handleEditImageSelection(fileList) {
+      const incoming = Array.from(fileList || []);
+      if (!incoming.length) return;
+
+      const { files, errors } = validateImageFiles(incoming);
+      selectedEditFiles = files;
+      updateEditUploadStatus(errors);
+
+      const previewList = await Promise.all(selectedEditFiles.map((file) => fileToDataUrl(file)));
+      renderImagePreviews(previewList.filter(Boolean));
     }
 
     async function loadCategories() {
@@ -302,14 +367,35 @@
       document.getElementById('eStock').value = p.stock;
       document.getElementById('eBestSeller').checked = Boolean(p.is_best_seller);
       const images = normalizeImages(p);
-      document.getElementById('eImages').value = images.join('\n');
+      selectedEditFiles = [];
+      if (eImageUpload) eImageUpload.value = '';
+      updateEditUploadStatus();
       document.getElementById('eDesc').value = p.description || '';
       renderImagePreviews(images);
       modal.classList.add('open');
     }
 
-    document.getElementById('eImages').addEventListener('input', (e) => {
-      renderImagePreviews(parseImageInput(e.target.value));
+    eImageUploadZone.addEventListener('click', () => eImageUpload.click());
+    eImageUploadZone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        eImageUpload.click();
+      }
+    });
+    eImageUpload.addEventListener('change', (e) => {
+      handleEditImageSelection(e.target.files);
+    });
+    eImageUploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      eImageUploadZone.classList.add('dragover');
+    });
+    eImageUploadZone.addEventListener('dragleave', () => {
+      eImageUploadZone.classList.remove('dragover');
+    });
+    eImageUploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      eImageUploadZone.classList.remove('dragover');
+      handleEditImageSelection(e.dataTransfer?.files || []);
     });
 
     document.getElementById('closeModal').addEventListener('click', () => modal.classList.remove('open'));
@@ -317,22 +403,24 @@
 
     editForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const payload = {
-        id: Number(document.getElementById('eId').value),
-        name: document.getElementById('eName').value.trim(),
-        description: document.getElementById('eDesc').value.trim(),
-        price: Number(document.getElementById('ePrice').value),
-        old_price: document.getElementById('eOldPrice').value ? Number(document.getElementById('eOldPrice').value) : null,
-        category_id: Number(document.getElementById('eCategory').value),
-        stock: Number(document.getElementById('eStock').value),
-        is_best_seller: document.getElementById('eBestSeller').checked ? 1 : 0,
-        images: parseImageInput(document.getElementById('eImages').value),
-      };
+      const formData = new FormData();
+      formData.append('id', String(Number(document.getElementById('eId').value)));
+      formData.append('name', document.getElementById('eName').value.trim());
+      formData.append('description', document.getElementById('eDesc').value.trim());
+      formData.append('price', String(Number(document.getElementById('ePrice').value || 0)));
+      if (document.getElementById('eOldPrice').value !== '') {
+        formData.append('old_price', String(Number(document.getElementById('eOldPrice').value)));
+      }
+      formData.append('category_id', String(Number(document.getElementById('eCategory').value)));
+      formData.append('stock', String(Number(document.getElementById('eStock').value || 0)));
+      formData.append('is_best_seller', document.getElementById('eBestSeller').checked ? '1' : '0');
+      selectedEditFiles.forEach((file) => {
+        formData.append('images[]', file);
+      });
 
       const res = await fetch('../php/admin_update_product.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formData,
       });
       const data = await res.json();
       if (!data.success) {

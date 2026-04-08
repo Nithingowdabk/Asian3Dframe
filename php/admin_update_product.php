@@ -61,6 +61,33 @@ function ensure_best_seller_column(mysqli $conn): bool
     return db_has_column($conn, 'products', 'is_best_seller');
 }
 
+function collect_uploaded_images(): array
+{
+    if (isset($_FILES['images']) && is_array($_FILES['images']['name'] ?? null)) {
+        $files = [];
+        $names = $_FILES['images']['name'];
+        foreach ($names as $index => $name) {
+            if (($name ?? '') === '') {
+                continue;
+            }
+            $files[] = [
+                'name' => $name,
+                'type' => $_FILES['images']['type'][$index] ?? '',
+                'tmp_name' => $_FILES['images']['tmp_name'][$index] ?? '',
+                'error' => $_FILES['images']['error'][$index] ?? UPLOAD_ERR_NO_FILE,
+                'size' => $_FILES['images']['size'][$index] ?? 0,
+            ];
+        }
+        return $files;
+    }
+
+    if (isset($_FILES['image']) && ($_FILES['image']['name'] ?? '') !== '') {
+        return [$_FILES['image']];
+    }
+
+    return [];
+}
+
 $hasCategoriesTable = db_has_table($conn, 'categories');
 $hasProductCategoryId = db_has_column($conn, 'products', 'category_id');
 if (!ensure_best_seller_column($conn)) {
@@ -112,20 +139,88 @@ function normalize_image_entries(mixed $value): array
     return $images;
 }
 
-$raw  = file_get_contents('php://input');
-$body = json_decode($raw, true);
+$contentType = strtolower((string)($_SERVER['CONTENT_TYPE'] ?? ''));
+$isJsonRequest = str_contains($contentType, 'application/json');
+
+if ($isJsonRequest) {
+    $raw = file_get_contents('php://input');
+    $body = json_decode($raw, true);
+    if (!is_array($body)) {
+        $body = [];
+    }
+} else {
+    $body = $_POST;
+}
 
 $id          = isset($body['id']) ? (int)$body['id'] : 0;
 $name        = isset($body['name']) ? trim((string)$body['name']) : '';
 $description = isset($body['description']) ? trim((string)$body['description']) : '';
 $price       = isset($body['price']) ? (float)$body['price'] : 0;
-$oldPrice    = isset($body['old_price']) && $body['old_price'] !== null ? (float)$body['old_price'] : null;
+$oldPriceRaw = $body['old_price'] ?? null;
+$oldPrice    = ($oldPriceRaw === null || $oldPriceRaw === '') ? null : (float)$oldPriceRaw;
 $categoryRaw = isset($body['category']) ? trim((string)$body['category']) : '';
 $categoryId  = isset($body['category_id']) ? (int)$body['category_id'] : 0;
 $stock       = isset($body['stock']) ? (int)$body['stock'] : 0;
 $isBestSeller = isset($body['is_best_seller']) ? (int)$body['is_best_seller'] : 0;
 $isBestSeller = $isBestSeller === 1 ? 1 : 0;
 $images      = normalize_image_entries($body['images'] ?? ($body['image'] ?? ''));
+
+$uploadedFiles = collect_uploaded_images();
+if ($uploadedFiles) {
+    if (count($uploadedFiles) > 6) {
+        echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+        exit;
+    }
+
+    $allowed = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
+
+    $uploadDir = __DIR__ . '/../assets/images/products';
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+        exit;
+    }
+
+    $uploadedPaths = [];
+    foreach ($uploadedFiles as $file) {
+        if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+            exit;
+        }
+        if (($file['size'] ?? 0) > 5 * 1024 * 1024) {
+            echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+            exit;
+        }
+
+        $mime = '';
+        if (class_exists('finfo')) {
+            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $mime = (string)$finfo->file($file['tmp_name']);
+        }
+        if ($mime === '' && function_exists('mime_content_type')) {
+            $mime = (string)mime_content_type($file['tmp_name']);
+        }
+        if (!isset($allowed[$mime])) {
+            echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+            exit;
+        }
+
+        $filename = 'product_' . date('Ymd_His') . '_' . bin2hex(random_bytes(8)) . '.' . $allowed[$mime];
+        $target = $uploadDir . DIRECTORY_SEPARATOR . $filename;
+        if (!move_uploaded_file($file['tmp_name'], $target)) {
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Upload failed.']);
+            exit;
+        }
+        $uploadedPaths[] = 'assets/images/products/' . $filename;
+    }
+
+    $images = $uploadedPaths;
+}
 
 if ($categoryId <= 0 && $categoryRaw !== '' && ctype_digit($categoryRaw)) {
     $categoryId = (int)$categoryRaw;
@@ -161,7 +256,7 @@ if ($hasProductCategoryId && $hasCategoriesTable) {
     }
 }
 
-if ($id <= 0 || $name === '' || $description === '' || $price <= 0 || $stock < 0) {
+if ($id <= 0 || $name === '' || $description === '' || $price < 0 || $stock < 0) {
     echo json_encode(['success' => false, 'message' => 'Invalid product data.']);
     exit;
 }
