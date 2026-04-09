@@ -3,6 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search || '');
+      var id = params.get('id');
+      var target = 'premium-react/dist/products';
+      if (id) target = 'premium-react/dist/product/' + encodeURIComponent(id);
+      window.location.replace(target);
+    })();
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0; url=premium-react/dist/products" />
+  </noscript>
   <title>Product Details - Asian3DFrames</title>
   <link rel="stylesheet" href="assets/css/style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
