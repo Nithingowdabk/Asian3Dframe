@@ -6,9 +6,15 @@ import { CartProvider } from './store/CartContext';
 import './index.css';
 import './styles/theme.css';
 
+function getRouterBaseName() {
+  const raw = String(import.meta.env.BASE_URL || '/');
+  const trimmed = raw.replace(/^\/+|\/+$/g, '');
+  return trimmed ? `/${trimmed}` : '/';
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter basename={getRouterBaseName()}>
       <CartProvider>
         <App />
       </CartProvider>
