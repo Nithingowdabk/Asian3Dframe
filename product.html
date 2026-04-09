@@ -284,6 +284,47 @@
       background: #fff;
       height: 260px;
     }
+    .mobile-frame-inline-card {
+      margin-top: 16px;
+      background: linear-gradient(180deg, #fffdfb 0%, #fff7ef 100%);
+      border: 1px solid rgba(200,149,108,.25);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+    .mobile-frame-inline-card h3 {
+      margin: 0 0 10px;
+      font-family: var(--font-heading);
+      font-size: clamp(1rem, 2vw, 1.28rem);
+      color: #2f2418;
+    }
+    .mobile-frame-inline-card p {
+      margin: 0 0 8px;
+      color: #3f362d;
+      font-size: .9rem;
+      line-height: 1.55;
+    }
+    .mobile-frame-inline-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .mobile-frame-inline-mini {
+      border: 1px solid rgba(0,0,0,.1);
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      color: #3f362d;
+      font-size: .85rem;
+      line-height: 1.5;
+    }
+    .mobile-frame-inline-mini strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #2f2418;
+      font-size: .86rem;
+    }
     .pill-group { display:flex; flex-wrap: wrap; gap: 8px; }
     .pill-btn {
       border: 1px solid rgba(0,0,0,.16);
@@ -401,6 +442,7 @@
       .mobile-frame-modal-card { padding: 14px; }
       .mobile-frame-compare { grid-template-columns: 1fr; }
       .mobile-frame-gallery { grid-template-columns: 1fr; }
+      .mobile-frame-inline-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -585,6 +627,26 @@
           </div>
         </section>
       </div>
+
+      <section class="mobile-frame-inline-card" aria-label="Mobile frame quick info">
+        <h3>What Is Mobile Frame?</h3>
+        <div class="mobile-frame-gallery" aria-label="Mobile frame examples on product page">
+          <img src="uploads/WhatsApp%20Image%202026-04-09%20at%2010.12.19%20AM.jpeg" alt="Mobile frame sample on product page 1" loading="lazy" />
+          <img src="uploads/WhatsApp%20Image%202026-04-09%20at%2010.12.19%20AM%20(1).jpeg" alt="Mobile frame sample on product page 2" loading="lazy" />
+        </div>
+        <p>Mobile Frame is an LED photo frame that gives your picture a bright, premium look like a mobile screen.</p>
+        <p>Best for home decor, bedroom, office, showroom, and gifting.</p>
+        <div class="mobile-frame-inline-grid">
+          <div class="mobile-frame-inline-mini">
+            <strong>Mobile Frame</strong>
+            LED glow, premium look, and visible even in low light.
+          </div>
+          <div class="mobile-frame-inline-mini">
+            <strong>Normal Frame</strong>
+            No glow, basic look, and depends on room light.
+          </div>
+        </div>
+      </section>
 
       <div class="trust-cards" aria-label="Extra product trust cards">
         <article class="trust-card">
