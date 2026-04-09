@@ -161,6 +161,128 @@
       font-size: .79rem;
       line-height: 1.42;
     }
+    .mobile-frame-info-wrap { margin-top: 10px; }
+    .mobile-frame-info-btn {
+      border: 1px solid rgba(200,149,108,.55);
+      background: linear-gradient(135deg, #fff4ea, #fffdf9);
+      color: #7a4f2f;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font: 700 .78rem/1 var(--font-body);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .mobile-frame-info-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--gold-dark);
+      box-shadow: 0 8px 16px rgba(160,112,74,.15);
+    }
+    .mobile-frame-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 1900;
+      background: rgba(16, 12, 8, .66);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .mobile-frame-modal.is-open { display: flex; }
+    .mobile-frame-modal-card {
+      width: min(920px, 100%);
+      max-height: min(92vh, 920px);
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid rgba(200,149,108,.28);
+      background: linear-gradient(180deg, #fffdfb 0%, #fff7ef 100%);
+      box-shadow: 0 20px 48px rgba(0,0,0,.26);
+      padding: 18px;
+    }
+    .mobile-frame-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      position: sticky;
+      top: 0;
+      background: linear-gradient(180deg, #fffdfb 0%, #fff7ef 100%);
+      padding-bottom: 8px;
+      z-index: 1;
+    }
+    .mobile-frame-modal-title {
+      font-family: var(--font-heading);
+      color: #2f2418;
+      font-size: clamp(1.05rem, 2.2vw, 1.42rem);
+      margin: 0;
+    }
+    .mobile-frame-modal-close {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.16);
+      background: #fff;
+      color: #374151;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .mobile-frame-modal-close:hover { border-color: #111827; }
+    .mobile-frame-modal-body {
+      color: #3f362d;
+      font-size: .9rem;
+      line-height: 1.6;
+    }
+    .mobile-frame-modal-body h4 {
+      font-size: .88rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #7a4f2f;
+      margin: 14px 0 6px;
+    }
+    .mobile-frame-modal-body p { margin: 0 0 10px; }
+    .mobile-frame-modal-body ul {
+      margin: 0 0 10px 18px;
+      padding: 0;
+    }
+    .mobile-frame-modal-body li { margin: 4px 0; }
+    .mobile-frame-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 8px 0 10px;
+    }
+    .mobile-frame-compare-card {
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.1);
+      background: #fff;
+      padding: 10px;
+    }
+    .mobile-frame-compare-card h5 {
+      margin: 0 0 6px;
+      color: #2f2418;
+      font-size: .9rem;
+    }
+    .mobile-frame-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 10px 0 4px;
+    }
+    .mobile-frame-gallery img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.1);
+      object-fit: cover;
+      max-height: 240px;
+    }
     .pill-group { display:flex; flex-wrap: wrap; gap: 8px; }
     .pill-btn {
       border: 1px solid rgba(0,0,0,.16);
@@ -275,6 +397,9 @@
       .name { font-size: 1.3rem; }
       .price { font-size: 1.2rem; }
       .cta-row .btn { width: 100%; justify-content: center; }
+      .mobile-frame-modal-card { padding: 14px; }
+      .mobile-frame-compare { grid-template-columns: 1fr; }
+      .mobile-frame-gallery { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -403,6 +528,12 @@
               <button type="button" class="pill-btn" data-frame-type="normal" aria-pressed="false">Normal Frame</button>
             </div>
             <p id="frameTypeHint" class="frame-type-note">Mobile Frame: Slim bezel, glossy photo finish, and warm backlight effect.</p>
+            <div class="mobile-frame-info-wrap">
+              <button type="button" id="mobileFrameInfoBtn" class="mobile-frame-info-btn">
+                <i class="fas fa-circle-info"></i>
+                What Is Mobile Frame?
+              </button>
+            </div>
           </div>
 
           <div class="option-block">
@@ -542,8 +673,98 @@
     </div>
   </footer>
 
+  <div class="mobile-frame-modal" id="mobileFrameModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mobileFrameModalTitle">
+    <div class="mobile-frame-modal-card">
+      <div class="mobile-frame-modal-head">
+        <h3 class="mobile-frame-modal-title" id="mobileFrameModalTitle">Mobile Frame (LED Photo Frame)</h3>
+        <button type="button" class="mobile-frame-modal-close" id="mobileFrameModalClose" aria-label="Close popup">
+          <i class="fas fa-xmark"></i>
+        </button>
+      </div>
+      <div class="mobile-frame-modal-body">
+        <p>A Mobile Frame is a modern photo frame designed with built-in LED lighting that makes your images look bright, vibrant, and eye-catching, similar to a mobile screen display.</p>
+        <p>Unlike regular frames, this frame glows, enhancing colors and details, making it perfect for both day and night viewing.</p>
+
+        <h4>Key Features</h4>
+        <ul>
+          <li>Built-in LED lighting for glowing effect</li>
+          <li>High-quality, sharp image display</li>
+          <li>Sleek and modern frame design</li>
+          <li>Easy wall mounting</li>
+          <li>Power adapter included</li>
+        </ul>
+
+        <h4>Difference from Normal Frames</h4>
+        <div class="mobile-frame-compare">
+          <article class="mobile-frame-compare-card">
+            <h5>Mobile Frame</h5>
+            <ul>
+              <li>Glowing display with LED light</li>
+              <li>Premium and modern look</li>
+              <li>Visible even in low light</li>
+            </ul>
+          </article>
+          <article class="mobile-frame-compare-card">
+            <h5>Normal Frame</h5>
+            <ul>
+              <li>No lighting</li>
+              <li>Basic appearance</li>
+              <li>Depends on external light</li>
+            </ul>
+          </article>
+        </div>
+
+        <h4>Perfect For</h4>
+        <ul>
+          <li>Home decor</li>
+          <li>Bedrooms and living spaces</li>
+          <li>Offices and studios</li>
+          <li>Showrooms and boutiques</li>
+          <li>Gifting purposes</li>
+        </ul>
+
+        <h4>Why Choose Mobile Frame?</h4>
+        <p>It is not just a photo frame, it is a highlight piece that enhances your space with a modern and premium look.</p>
+
+        <div class="mobile-frame-gallery" aria-label="Mobile frame examples">
+          <img src="uploads/WhatsApp%20Image%202026-04-09%20at%2010.12.19%20AM.jpeg" alt="Mobile frame sample view 1" loading="lazy" />
+          <img src="uploads/WhatsApp%20Image%202026-04-09%20at%2010.12.19%20AM%20(1).jpeg" alt="Mobile frame sample view 2" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="assets/js/script.js?v=20260407f"></script>
   <script src="assets/js/products-render.js?v=20260407a"></script>
   <script src="assets/js/recent-viewed.js?v=20260407f"></script>
+  <script>
+    (function () {
+      const openBtn = document.getElementById('mobileFrameInfoBtn');
+      const modal = document.getElementById('mobileFrameModal');
+      const closeBtn = document.getElementById('mobileFrameModalClose');
+      if (!openBtn || !modal || !closeBtn) return;
+
+      const openModal = () => {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      };
+
+      const closeModal = () => {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => {
+        if (event.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
