@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteBase /gift4you/premium-react/dist/
+RewriteBase /premium-react/
 
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d

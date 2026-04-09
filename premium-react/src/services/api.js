@@ -1,4 +1,4 @@
-const APP_BASE = (import.meta.env.VITE_APP_BASE || '/gift4you').replace(/\/$/, '');
+const APP_BASE = (import.meta.env.VITE_APP_BASE || '').replace(/\/$/, '');
 const API_BASE = import.meta.env.DEV ? '/php' : `${APP_BASE}/php`;
 
 function asArrayImage(imageField) {
