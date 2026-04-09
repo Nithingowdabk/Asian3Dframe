@@ -1025,14 +1025,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-direction: column;
   align-items: center;
   text-align: center;
-  flex: 0 0 220px;
+  flex: 0 0 190px;
   scroll-snap-align: start;
 }
 .cat-card:hover { transform: translateY(-6px); }
 
 .cat-img-wrap {
   position: relative;
-  width: min(100%, 190px);
+  width: min(100%, 158px);
   aspect-ratio: 1/1;
   border-radius: 50%;
   overflow: hidden;
@@ -1084,7 +1084,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .cat-info h3 {
   font-family: var(--font-body);
-  font-size: 1.9rem;
+  font-size: 1.18rem;
   font-weight: 600;
   margin-bottom: 0;
   line-height: 1.2;
@@ -1679,7 +1679,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* ── RESPONSIVE ─────────────────────────────────────────────────────── */
 @media (max-width: 1100px) {
   .categories-grid { gap: 20px; }
-  .cat-card { flex-basis: 200px; }
+  .cat-card { flex-basis: 180px; }
   .products-grid   { grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .product-card    { max-width: 100%; }
   .footer-grid     { grid-template-columns: 1fr 1fr; gap: 40px; }
@@ -1777,7 +1777,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .navbar.scrolled .hamburger span { background: var(--dark); }
 
   .categories-grid { gap: 16px; }
-  .cat-card { flex-basis: 170px; }
+  .cat-card { flex-basis: 150px; }
+  .cat-img-wrap { width: min(100%, 136px); }
+  .cat-info h3 { font-size: 1rem; }
   .products-grid   { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .product-card    { max-width: 100%; }
 
@@ -1830,9 +1832,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 @media (max-width: 480px) {
   .categories-grid { gap: 12px; }
+  .hero-random-wrap {
     width: min(220px, 68vw);
     aspect-ratio: 3 / 4;
     height: auto;
+  }
   .products-grid   { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .product-card    { max-width: 100%; }
   .product-info    { padding: 10px 10px; }
