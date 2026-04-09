@@ -516,6 +516,26 @@ a {
   align-items: center;
 }
 
+.footer-content p {
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: var(--ink);
+}
+
 @media (max-width: 920px) {
   .hero-premium,
   .detail-layout,
