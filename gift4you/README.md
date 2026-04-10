@@ -1,0 +1,154 @@
+#f4f4f4; font-family: 'Inter', sans-serif; color: #333;">
+
+  <nav class="navbar" id="navbar" style="background-color: #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo" style="color: #d69e2e;">
+        <span class="logo-icon">🎁</span>
+        Asian<span class="logo-accent">3D Frames</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="products.html" class="nav-link">Products</a></li>
+        <li><a href="#upload-section" class="nav-link">Upload</a></li>
+        <li><a href="#openAlbum" class="nav-link">Album</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="cart.html" class="icon-btn cart-icon-btn" title="Cart">
+          <i class="fas fa-cart-shopping"></i>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero" id="hero" style="background: linear-gradient(to right, #d69e2e, #f4f4f4); padding: 60px 0; text-align: center;">
+    <div class="hero-content">
+      <h1 class="hero-title" style="font-family: 'Playfair Display', serif; font-size: 3rem; color: #fff;">
+        Frame Your<br/>
+        <span class="gradient-text" style="color: #fff;">Memories</span>
+      </h1>
+      <p class="hero-subtitle" style="font-size: 1.2rem; color: #fff;">
+        Turn your cherished moments into timeless art. Personalised, handcrafted photo frames — delivered to your door.
+      </p>
+      <div class="hero-btns">
+        <a href="products.html" class="btn btn-primary" style="background-color: #d69e2e; color: #fff;">
+          Shop Now <i class="fas fa-arrow-right"></i>
+        </a>
+        <a href="#upload-section" class="btn btn-ghost" style="border: 2px solid #d69e2e; color: #d69e2e;">
+          <i class="fas fa-upload"></i> Custom Photo Frame
+        </a>
+        <button type="button" class="btn btn-ghost" id="openAlbumBtn" style="border: 2px solid #d69e2e; color: #d69e2e;">
+          <i class="fas fa-folder-open"></i> Album
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-strip" style="background-color: #d69e2e; color: #fff;">
+    <div class="marquee-track">
+      <span>✦ Free Shipping Over 300</span>
+      <span>✦ Custom Engraving Available</span>
+      <span>✦ Same-Day Dispatch</span>
+      <span>✦ Premium Quality Frames</span>
+      <span>✦ 7-Day Easy Returns</span>
+      <span>✦ Handcrafted with Love</span>
+    </div>
+  </div>
+
+  <section class="section categories-section" style="padding: 40px 0;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" style="color: #d69e2e;">Browse</span>
+        <h2 class="section-title" style="font-family: 'Playfair Display', serif;">Shop by Style</h2>
+        <p class="section-sub">Fresh picks every visit: floating category bubbles for your moments.</p>
+      </div>
+
+      <div class="categories-grid" id="homeCategoriesGrid">
+        <a href="products.html?category=mobile" class="cat-card" style="border: 1px solid #d69e2e;">
+          <div class="cat-img-wrap">
+            <img src="assets/images/cat-classic.jpg" alt="Mobile Photo Frame" onerror="this.src='https://placehold.co/320x200/f5e6d3/c8956c?text=Mobile+Photo+Frame'"/>
+          </div>
+          <div class="cat-info">
+            <h3 style="color: #d69e2e;">Mobile Photo Frame</h3>
+          </div>
+        </a>
+        <a href="products.html?category=normal" class="cat-card" style="border: 1px solid #d69e2e;">
+          <div class="cat-img-wrap">
+            <img src="assets/images/cat-modern.jpg" alt="Normal Photo Frame" onerror="this.src='https://placehold.co/320x200/e8f0fe/7090d4?text=Normal+Photo+Frame'"/>
+          </div>
+          <div class="cat-info">
+            <h3 style="color: #d69e2e;">Normal Photo Frame</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="contact" style="background-color: #333; color: #fff; padding: 40px 0;">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="index.html" class="nav-logo" style="color: #d69e2e;">
+            <span class="logo-icon">🎁</span>Asian<span class="logo-accent">3D Frames</span>
+          </a>
+          <p>Turning moments into memories, one frame at a time.</p>
+          <div class="social-links">
+            <a href="#" class="social-btn" style="color: #d69e2e;"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" style="color: #d69e2e;"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="social-btn" style="color: #d69e2e;"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-btn" style="color: #d69e2e;"><i class="fab fa-whatsapp"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 style="color: #d69e2e;">Shop</h4>
+          <ul id="footerShopLinks">
+            <li><a href="products.html?category=mobile" style="color: #fff;">Mobile Photo Frame</a></li>
+            <li><a href="products.html?category=normal" style="color: #fff;">Normal Photo Frame</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 style="color: #d69e2e;">Help</h4>
+          <ul>
+            <li><a href="#" style="color: #fff;">Terms and Conditions</a></li>
+            <li><a href="#" style="color: #fff;">Shipping Policy</a></li>
+            <li><a href="#" style="color: #fff;">Returns & Refunds</a></li>
+            <li><a href="#" style="color: #fff;">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4 style="color: #d69e2e;">Contact Us</h4>
+          <ul class="contact-list">
+            <li><i class="fas fa-phone"></i> 01012345678</li>
+            <li><i class="fab fa-whatsapp"></i> 6362639150</li>
+            <li><i class="fas fa-envelope"></i> hello@asian3dframes.com</li>
+            <li><i class="fas fa-clock"></i> Daily 9 AM – 9 PM</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom" style="text-align: center; margin-top: 20px;">
+        <p>&copy; 2026 Asian3DFrames. All rights reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#" style="color: #d69e2e;">Privacy Policy</a>
+          <a href="#" style="color: #d69e2e;">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript code remains unchanged
+  </script>
+  <script src="assets/js/script.js?v=20260406"></script>
+  <script src="assets/js/recent-viewed.js?v=20260407f"></script>
+</body>
+</html>
