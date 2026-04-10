@@ -12,10 +12,10 @@
 		<meta http-equiv="refresh" content="0; url=premium-react/cart" />
 	</noscript>
 	<title>Asian3DFrames | Cart</title>
-	<link rel="stylesheet" href="assets/css/style.css?v=20260410p" />
+	<link rel="stylesheet" href="assets/css/style.css?v=20260410premium" />
 	<link rel="preconnect" href="https://fonts.googleapis.com" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 	<style>
 		:root {
@@ -43,7 +43,7 @@
 		}
 
 		body {
-			font-family: "Inter", sans-serif;
+			font-family: "Plus Jakarta Sans", sans-serif;
 			background: linear-gradient(180deg, #f8fafc 0%, #f4f5fa 100%);
 			color: var(--text);
 			min-height: 100vh;
@@ -79,7 +79,7 @@
 		}
 
 		.logo {
-			font-family: "Playfair Display", serif;
+			font-family: "Bodoni Moda", serif;
 			font-size: 1.8rem;
 			font-weight: 700;
 			letter-spacing: 0.2px;
@@ -129,7 +129,7 @@
 		}
 
 		.page-title {
-			font-family: "Playfair Display", serif;
+			font-family: "Bodoni Moda", serif;
 			font-size: clamp(1.7rem, 2vw, 2.2rem);
 			line-height: 1.2;
 			margin-bottom: 0.5rem;
@@ -454,12 +454,58 @@
 				gap: 0.6rem;
 			}
 		}
+
+		/* Premium aesthetic override */
+		:root {
+			--bg: #f7f1e8;
+			--surface: #fffdf8;
+			--surface-soft: #f8f1e6;
+			--text: #121a25;
+			--muted: #5f6878;
+			--brand: #d4b07a;
+			--brand-dark: #9c7547;
+			--accent: #1e2838;
+			--line: rgba(30, 40, 56, 0.14);
+		}
+
+		body {
+			font-family: "Plus Jakarta Sans", sans-serif;
+			background:
+				radial-gradient(860px 360px at 106% -15%, rgba(212, 176, 122, 0.2), transparent 60%),
+				linear-gradient(180deg, #f9f4ec 0%, #fcfaf6 100%);
+		}
+
+		.logo,
+		.page-title {
+			font-family: "Bodoni Moda", serif;
+		}
+
+		.navbar {
+			background: rgba(252, 250, 246, 0.9);
+			border-bottom: 1px solid rgba(30, 40, 56, 0.1);
+		}
+
+		.card {
+			background: linear-gradient(180deg, #fffdf8 0%, #f8f1e6 100%);
+			border: 1px solid rgba(156, 117, 71, 0.2);
+			box-shadow: 0 16px 36px rgba(20, 30, 44, 0.1);
+		}
+
+		.cart-item {
+			background: rgba(252, 250, 246, 0.95);
+			border-color: rgba(30, 40, 56, 0.1);
+		}
+
+		.cart-pill {
+			background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+			color: #fff;
+		}
 	</style>
 </head>
 <body>
 	<header class="navbar">
 		<div class="container nav-wrap">
-			<a href="index.html" class="logo">Asian<span class="logo-accent">3D Frames</span></a>
+			<a href="index.html" class="logo"><img src="uploads/Asian3DFrames_logo.png" alt="Asian3DFrames" class="site-logo-img" style="height:92px;width:auto;display:block;margin-top:-18px;margin-bottom:-18px;"/></a>
 			<div class="nav-actions">
 				<a href="products.html" class="btn-link">Continue Shopping</a>
 				<span class="cart-pill" id="topCartCount"><i class="fas fa-cart-shopping" aria-hidden="true"></i> 0 Items</span>
@@ -471,7 +517,7 @@
 		<div class="container">
 			<div class="page-head">
 				<h1 class="page-title">Your Cart</h1>
-				<p class="page-sub">Review your favorite frames before checkout.</p>
+				<p class="page-sub">Review your curated frame selections before secure checkout.</p>
 			</div>
 
 			<div class="layout">
@@ -512,9 +558,7 @@
 			<div class="footer-grid">
 
 				<div class="footer-brand">
-					<a href="index.html" class="nav-logo">
-						<span class="logo-icon">🎁</span>Asian<span class="logo-accent">3D Frames</span>
-					</a>
+					<a href="index.html" class="nav-logo"><img src="uploads/Asian3DFrames_logo.png" alt="Asian3DFrames" class="site-logo-img" style="height:92px;width:auto;display:block;margin-top:-18px;margin-bottom:-18px;"/></a>
 					<p>Turning moments into memories, one frame at a time.</p>
 					<div class="social-links">
 						<a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
